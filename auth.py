@@ -31,7 +31,7 @@ def register():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"})
     
-@authBp.get("/auth/logIn")
+@authBp.post("/auth/logIn")
 def login():
     try:
         userCredentials=request.get_json()
