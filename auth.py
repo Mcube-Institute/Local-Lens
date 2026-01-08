@@ -9,25 +9,25 @@ def register():
         userCredentials=request.get_json()
 
         if not userCredentials:
-            return jsonify({"status":"error","message":"All fields required."})
+            return jsonify({"status":"error","message":"All Fields Required."})
         
         name=userCredentials.get("name")
         email=userCredentials.get("email")
         password=userCredentials.get("password")
 
         if not name or not email or not password:
-            return jsonify({"status":"error","message":"Missing fields"})
+            return jsonify({"status":"error","message":"Missing Fields"})
 
         if User.objects(email=email).first():
-            return jsonify({"status":"error","message":"This email address is already registered."})
+            return jsonify({"status":"error","message":"This Email Address Is Already Registered."})
         
-        user=User(
+        User(
             name=name,
             email=email,
             password=password
         ).save()
  
-        return jsonify({"status": "success", "message": "User created successfully."})
+        return jsonify({"status": "success", "message": "User Registered Successfully."})
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"})
     
@@ -37,7 +37,7 @@ def login():
         userCredentials=request.get_json()
 
         if not userCredentials:
-            return jsonify({"status": "error", "message": "All fields required."}) 
+            return jsonify({"status": "error", "message": "All Fields Required."}) 
         
         email=userCredentials.get("email")
         password=userCredentials.get("password")
@@ -45,13 +45,13 @@ def login():
         user = User.objects(email=email,password=password).first()
 
         if not user:
-            return jsonify({"status": "error", "message": "Invalid email or password."})
+            return jsonify({"status": "error", "message": "Invalid Email or Password."})
 
-        return jsonify({"status": "success", "message": "Loggedin successfully.","isAuth": True})
+        return jsonify({"status": "success", "message": "Loggedin Successfully."})
     
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"})
     
 @authBp.get("/auth/logOut")
 def logOut():
-    return jsonify({"status":"success","message":"Logged out"})
+    return jsonify({"status":"success","message":"Logged Out"})

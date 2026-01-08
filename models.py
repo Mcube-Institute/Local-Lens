@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Role(Document):
     id=StringField(primary_key=True, default= lambda: str(uuid4()))
-    name=StringField(required=True)
+    name=StringField(required=True,unique=True)
     createdAt=DateTimeField(default=datetime.now())
     updateAt=DateTimeField()
 
