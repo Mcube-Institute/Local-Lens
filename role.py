@@ -50,13 +50,6 @@ def roleSpecific():
 
         if not id:
             return jsonify({"status": "error", "message": "Id is required."})
-
-        roleName = request.get_json()
-
-        name=roleName.get("name")
-
-        if not roleName:
-            return jsonify({"status": "error", "message": "Name Is Required."})
         
         role=Role.objects(id=id).first()
 

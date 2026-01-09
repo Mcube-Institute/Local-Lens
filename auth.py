@@ -15,7 +15,7 @@ def register():
         email=userCredentials.get("email")
         password=userCredentials.get("password")
 
-        if not name or not email or not password:
+        if not name and not email and not password:
             return jsonify({"status":"error","message":"Missing Fields"})
 
         if User.objects(email=email).first():
