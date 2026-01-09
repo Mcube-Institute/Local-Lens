@@ -89,7 +89,7 @@ def userSpecific():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"})
     
-@userBp.post("/user/update"):
+@userBp.post("/user/update")
 def userUpdate():
     try:
         id = request.args.get("id")
