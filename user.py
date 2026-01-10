@@ -1,7 +1,7 @@
-from flask import blueprint,request,jsonify
+from flask import Blueprint,request,jsonify
 from  models import User,Role
 
-userBp=blueprint("userBp",__name__)
+userBp=Blueprint("userBp",__name__)
 
 @userBp.post("/user/new")
 def newUser():
@@ -16,7 +16,7 @@ def newUser():
         password=user.get("password")
         roleId=user.get("role_id")
 
-        if not name and not email and not password and roleId:
+        if not name or not email or not password or roleId:
             return jsonify({"status":"error","message":"Missing Fields"})
     
         if User.objects(email=email).first():
@@ -30,7 +30,7 @@ def newUser():
         User.objects(
             name=name,
             email=email,
-            passowrd=password,
+            passwordd=password,
             role=role
         ).save()
     
@@ -45,7 +45,7 @@ def allUsers():
         users=User.objects()
 
         if not users:
-            return({"status":"error","message":"Empty Users."})
+            return jsonify({"status":"error","message":"Empty Users."})
         
         userList=[]
 
@@ -57,7 +57,7 @@ def allUsers():
                 "role":user.role  #user.role.name 
             }
 
-        userList.append(data)
+            userList.append(data)
 
         return jsonify({"status":"success","message":"All Users Retrieved.","data":userList})
     
@@ -129,7 +129,7 @@ def userUpdate():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"})
     
-@userBp.delete("/role/delete")
+@userBp.delete("/user/delete")
 def userDelete():
     try:
         id = request.args.get("id")

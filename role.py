@@ -7,10 +7,11 @@ roleBp=Blueprint("roleBp",__name__)
 def newRole():
     try:
         role=request.get_json()
-        name=role.get("name")
 
-        if not role and not name:
+        if not role:
             return jsonify({"status":"error","message":"Role Not To Be Empty."})
+        
+        name=role.get("name")
         
         Role(
             name=name
@@ -36,7 +37,7 @@ def allRoles():
                 "name":role.name
             }
 
-        roleList.append(data)
+            roleList.append(data)
 
         return jsonify({"status":"success","message":"Roles Are Retrieved Successfully.","data":roleList})
 
@@ -74,10 +75,14 @@ def roleUpdate():
             return jsonify({"status": "error", "message": "Id is required."})    
         
         roleName=request.get_json()
-        name=roleName.get("name")
 
         if not roleName:
             return jsonify({"status":"error","message":"Role Not To Be Empty."})
+        
+        name=roleName.get("name")
+
+        if Role.objects(name=name).first():
+            return jsonify({"status":"error","message":"Duplicated Role."})
         
         role=Role.objects(id=id).first()
 
