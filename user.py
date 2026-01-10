@@ -16,7 +16,7 @@ def newUser():
         password=user.get("password")
         roleId=user.get("role_id")
 
-        if not name or not email or not password or roleId:
+        if not name or not email or not password or not roleId:
             return jsonify({"status":"error","message":"Missing Fields"})
     
         if User.objects(email=email).first():
@@ -30,7 +30,7 @@ def newUser():
         User.objects(
             name=name,
             email=email,
-            passwordd=password,
+            password=password,
             role=role
         ).save()
     
@@ -124,7 +124,7 @@ def userUpdate():
 
         user.save()
 
-        return jsonify({"status":"error","message":"User Updated Successfully."})
+        return jsonify({"status":"success","message":"User Updated Successfully."})
     
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"})

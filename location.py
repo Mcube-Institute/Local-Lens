@@ -26,7 +26,7 @@ def newLocation():
             state=state,
             country=country,
             pincode=pincode
-        )
+        ).save()
 
         return jsonify({"status":"success","message":"Location Added Successfully."})
 
@@ -62,7 +62,12 @@ def allLocations():
 locationBp.get("/location/getSpecific")
 def locationSpecific():
     try:
-        location=Location.objects()
+        id = request.args.get("id")
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is required."})
+
+        location=Location.objects(id=id).first()
 
         if not location:
             return jsonify({"status":"error","message":"LoactionS Are Empty."})
@@ -108,10 +113,10 @@ def locationUpdate():
         if not locationUpdate:
             return jsonify({"status":"error","message":"Location Not Found."})
 
-        locationUpdate.street=street,
-        locationUpdate.city=city,
-        locationUpdate.state=state,
-        locationUpdate.country=country,
+        locationUpdate.street=street
+        locationUpdate.city=city
+        locationUpdate.state=state
+        locationUpdate.country=country
         locationUpdate.pincode=pincode
 
         locationUpdate.save()

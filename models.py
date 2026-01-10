@@ -32,7 +32,7 @@ class Issue(Document):
     id=StringField(primary_key=True, default= lambda: str(uuid4()))
     issueTittle=StringField(required=True)
     issueDescription=StringField(required=True)
-    category=StringField(required=True,choices=["Road","Grbage","Water","Electricity","Others"])
+    category=StringField(required=True,choices=["Road","Garbage","Water","Electricity","Others"])
     location=ReferenceField(Location,required=True)
     imagePath=URLField()
     status=StringField(default='reported',choices=['reported','progress','resolved','rejected'])

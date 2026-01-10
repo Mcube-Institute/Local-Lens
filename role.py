@@ -113,7 +113,7 @@ def roleDelete():
         
         role.delete()
 
-        return({"status":"success","messge":"Role Deleted Successfully."})
+        return jsonify({"status":"success","messge":"Role Deleted Successfully."})
     
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"})
