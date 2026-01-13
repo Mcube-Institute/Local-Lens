@@ -14,6 +14,7 @@ class User(Document):
     email=EmailField(required=True,unique=True)
     password=StringField(required=True)
     role=ReferenceField(Role,required=True)
+    lastAssigned = BooleanField(default=False)
     createdAt=DateTimeField(default=datetime.now())
     updateAt=DateTimeField()
 
@@ -38,7 +39,6 @@ class Issue(Document):
     status=StringField(default='reported',choices=['reported','progress','resolved','rejected'])
     tags=StringField()
     assignedTo=ReferenceField(User,required=True)
-    rejectedReason=StringField()
     createdAt=DateTimeField(default=datetime.now())
     updatedAt=DateTimeField()
 
@@ -48,6 +48,7 @@ class IssueStatusHistory(Document):
     prvStatus=StringField(required=True)
     nextStatus=StringField(required=True)
     updatedBy=ReferenceField(User,required=True)
+    rejectedReason=StringField()
     resolvedAt=DateTimeField()
     updatedAt=DateTimeField()
 

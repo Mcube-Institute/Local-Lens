@@ -9,7 +9,7 @@ def newLocation():
         location=request.get_json()
 
         if not location:
-            return jsonify({"status":"error","message":"All fields Required."})
+            return jsonify({"status":"error","message":"All Fields Required."})
 
         street=location.get("street")
         city=location.get("city")
@@ -39,7 +39,7 @@ def allLocations():
         locations=Location.objects()
 
         if not locations:
-            return jsonify({"status":"error","message":"LoactionS Are Empty."})
+            return jsonify({"status":"error","message":"Location Is Empty."})
    
         locationList=[]
    
@@ -54,7 +54,7 @@ def allLocations():
 
             locationList.append(data)
 
-        return jsonify({"status":"sucsess","message":"Locations Are Retrieved.","data":locationList})
+        return jsonify({"status":"success","message":"Locations Are Retrieved.","data":locationList})
     
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"})
@@ -65,12 +65,12 @@ def locationSpecific():
         id = request.args.get("id")
 
         if not id:
-            return jsonify({"status": "error", "message": "Id is required."})
+            return jsonify({"status": "error", "message": "Id Is Required."})
 
         location=Location.objects(id=id).first()
 
         if not location:
-            return jsonify({"status":"error","message":"LoactionS Are Empty."})
+            return jsonify({"status":"error","message":"Location Is Empty."})
         
         data={
                 "street":location.street,
@@ -97,7 +97,7 @@ def locationUpdate():
         location=request.get_json()
 
         if not location:
-            return jsonify({"status":"error","message":"All fields Required."})
+            return jsonify({"status":"error","message":"All Fields Required."})
 
         street=location.get("street")
         city=location.get("city")

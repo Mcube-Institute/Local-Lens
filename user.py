@@ -14,7 +14,7 @@ def newUser():
         name=user.get("name")
         email=user.get("email")
         password=user.get("password")
-        roleId=user.get("role_id")
+        roleId=user.get("roleId")
 
         if not name or not email or not password or not roleId:
             return jsonify({"status":"error","message":"Missing Fields"})
@@ -54,7 +54,7 @@ def allUsers():
                 "name":user.name,
                 "email":user.email,
                 "password":user.password,
-                "role":user.role  #user.role.name 
+                "role":user.role.name 
             }
 
             userList.append(data)
@@ -81,7 +81,7 @@ def userSpecific():
             "name":user.name,
             "email":user.email,
             "password":user.password,
-            "role":user.role #user.role.name
+            "role":user.role.name
         }
         
         return jsonify({"status":"success","message":"All Users Retrieved.","data":data})
@@ -110,7 +110,7 @@ def userUpdate():
         name=userData.get("name")
         email=userData.get("email")
         password=userData.get("password")
-        roleId=userData.get("role_id")
+        roleId=userData.get("roleId")
 
         role=Role.objects(id=roleId).first()
 
