@@ -1,6 +1,11 @@
 from flask import Flask,request,render_template,jsonify
 from mongoengine import connect,connection
 from models import *
+from auth import authBp
+from role import roleBp
+from user import userBp
+from issue import issueBp
+from location import locationBp
 
 app=Flask(__name__)
 
@@ -12,6 +17,12 @@ try:
         print("Database not connected.")
 except Exception as e:
     print(f"Error:{str(e)}")
+
+app.register_blueprint(authBp)
+app.register_blueprint(roleBp)
+app.register_blueprint(userBp)
+app.register_blueprint(issueBp)
+app.register_blueprint(locationBp)
 
 @app.get("/")
 def home():
