@@ -4,14 +4,17 @@ from models import Issue,User,Location,Role
 issueBp=Blueprint("issueBp",__name__)
 
 def getNextAdmin():
-    adminRole = Role.objects(name="admin").first()
-    admins = User.objects(role=adminRole)
+    adminRole = Role.objects(name="Admin").first()
+    if not adminRole:
+        return None
 
+    admins = User.objects(role=adminRole)
     if not admins:
-        return jsonify({"status":"error","message":"Admin Not Found."})
+        return None
 
     current = User.objects(role=adminRole, lastAssigned=True).first()
 
+    # If no admin was previously assigned, pick first
     if not current:
         first = admins.first()
         first.lastAssigned = True
@@ -19,9 +22,28 @@ def getNextAdmin():
         return first
 
     adminList = list(admins)
+
+    # Safety check
+    if current not in adminList:
+        current.lastAssigned = False
+        current.save()
+        first = adminList[0]
+        first.lastAssigned = True
+        first.save()
+        return first
+
     index = adminList.index(current)
 
-    nextIndex = (index + 1) % len(adminList)
+    if index == len(adminList)-1:
+        current.lastAssigned = False
+        current.save()
+        first = admins.first()
+        first.lastAssigned = True
+        first.save()
+        return first
+    else:
+        nextIndex = index + 1
+
     nextAdmin = adminList[nextIndex]
 
     current.lastAssigned = False
@@ -32,6 +54,7 @@ def getNextAdmin():
 
     return nextAdmin
 
+
 @issueBp.post("/issue/new")
 def newIssue():
     try:
@@ -40,7 +63,7 @@ def newIssue():
         if not issue:
             return jsonify({"status":"error","message":"All Fields Required."})
         
-        issueTitle=issue.get("issueTittle")
+        issueTittle=issue.get("issueTittle")
         issueDescription=issue.get("issueDescription")
         category=issue.get("category")
         imagePath=issue.get("imagePath")
@@ -74,9 +97,9 @@ def newIssue():
         if not location:
             return jsonify({"status":"error","message":"All Fields Required."})
         
-        Location.objects(
+        Issue(
             user=user,
-            issueTitle=issueTitle,
+            issueTittle=issueTittle,
             issueDescription=issueDescription,
             category=category,
             location=location,
@@ -177,6 +200,8 @@ def issueUpdate():
         issue.category=category
         issue.imagePath=imagePath
         issue.tags=tags
+
+        issue.save()
 
         return jsonify({"status":"success","message":"Issue Updated Successfully."})
         

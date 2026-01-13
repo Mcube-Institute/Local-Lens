@@ -1,9 +1,9 @@
 from flask import Blueprint,request,jsonify
 from models import Location
 
-locationBp=Blueprint("LocationBp",__name__)
+locationBp=Blueprint("locationBp",__name__)
 
-locationBp.post("/location/new")
+@locationBp.post("/location/new")
 def newLocation():
     try:
         location=request.get_json()
@@ -20,7 +20,7 @@ def newLocation():
         if not len(pincode)==6:
             return jsonify({"status":"error","message":"Invalid Pincode."})
     
-        Location.objects(
+        Location(
             street=street,
             city=city,
             state=state,
@@ -33,7 +33,7 @@ def newLocation():
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"})
     
-locationBp.get("/location/getAll")
+@locationBp.get("/location/getAll")
 def allLocations():
     try:
         locations=Location.objects()
@@ -59,7 +59,7 @@ def allLocations():
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"})
 
-locationBp.get("/location/getSpecific")
+@locationBp.get("/location/getSpecific")
 def locationSpecific():
     try:
         id = request.args.get("id")
@@ -85,7 +85,7 @@ def locationSpecific():
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"})
     
-locationBp.post("/location/update")
+@locationBp.post("/location/update")
 def locationUpdate():
     try:
         id = request.args.get("id")
@@ -126,7 +126,7 @@ def locationUpdate():
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"})
     
-locationBp.delete("/location/delete")
+@locationBp.delete("/location/delete")
 def deleteLocation():
     try:
         id = request.args.get("id")

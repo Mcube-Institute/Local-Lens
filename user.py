@@ -27,7 +27,7 @@ def newUser():
         if not role:
             return jsonify({"status":"error","message":"Role Not Found."})
     
-        User.objects(
+        User(
             name=name,
             email=email,
             password=password,
