@@ -36,7 +36,7 @@ class Issue(Document):
     category=StringField(required=True,choices=["Road","Garbage","Water","Electricity","Sanitation","Others"])
     location=ReferenceField(Location,required=True)
     imagePath=URLField()
-    status=StringField(default='reported',choices=['reported','progress','resolved','rejected'])
+    status=StringField(default='Reported',choices=["Reported", "IN_PROGRESS", "RESOLVED", "CLOSED"])
     tags=StringField()
     assignedTo=ReferenceField(User,required=True)
     createdAt=DateTimeField(default=datetime.now())

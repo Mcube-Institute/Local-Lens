@@ -61,7 +61,7 @@ def newIssue():
         issue=request.get_json()
 
         if not issue:
-            return jsonify({"status":"error","message":"All Fields Required."})
+            return jsonify({"status":"error","message":"All Fields Required."}), 400
         
         issueTittle=issue.get("issueTittle")
         issueDescription=issue.get("issueDescription")
@@ -69,33 +69,39 @@ def newIssue():
         imagePath=issue.get("imagePath")
         tags=issue.get("tags")
 
+        if not issueTittle or not issueDescription or not category:
+            return jsonify({
+                "status": "error",
+                "message": "Issue title, description and category are required."
+            }), 400
+
         userId = request.args.get("userId")
 
         if not userId:
-            return jsonify({"status": "error", "message": "userId is required."})
+            return jsonify({"status": "error", "message": "userId is required."}), 400
         
         user=User.objects(id=userId).first()
 
         if not user:
-            return jsonify({"status":"error","message":"User Not Found."})
+            return jsonify({"status":"error","message":"User Not Found."}), 404
 
         assignedTo=getNextAdmin()
 
         if not assignedTo:
-            return jsonify({"status":"error","message":"No Admin Available."})    
+            return jsonify({"status":"error","message":"No Admin Available."}), 503       
 
         if not user:
-            return jsonify({"status":"error","message":"User Not Found."})
+            return jsonify({"status":"error","message":"User Not Found."}), 404
         
         locationId = request.args.get("locationId")
 
         if not locationId:
-            return jsonify({"status": "error", "message": "locationId is required."})
+            return jsonify({"status": "error", "message": "locationId is required."}), 400
         
         location=Location.objects(id=locationId).first()
 
         if not location:
-            return jsonify({"status":"error","message":"All Fields Required."})
+            return jsonify({"status":"error","message":"LocationNot Found."}), 404
         
         Issue(
             user=user,
@@ -108,10 +114,10 @@ def newIssue():
             assignedTo=assignedTo
         ).save()
 
-        return jsonify({"status":"success","message":"Issue Created Successfully."})
+        return jsonify({"status":"success","message":"Issue Created Successfully."}), 201
     
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"})
+        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
     
 @issueBp.get("/issue/getAll")
 def allIssues():
@@ -119,7 +125,7 @@ def allIssues():
         issues=Issue.objects()
 
         if not issues:
-            return jsonify({"status":"error","message":"Issues Are Empty."})
+            return jsonify({"status":"error","message":"Issues Are Empty."}), 200
         
         issueList=[]
 
@@ -138,10 +144,10 @@ def allIssues():
 
             issueList.append(data)
 
-        return jsonify({"status":"success","message":"Issues Are Retrievd Successfully.","data":issueList})            
+        return jsonify({"status":"success","message":"Issues Are Retrievd Successfully.","data":issueList}), 200           
     
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"})
+        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
 
 @issueBp.get("/issue/getspecific")
 def issueSpecific():
@@ -149,12 +155,12 @@ def issueSpecific():
         id = request.args.get("id")
 
         if not id:
-            return jsonify({"status": "error", "message": "Id is required."})
+            return jsonify({"status": "error", "message": "Id is required."}), 400
         
         issue=Issue.objects(id=id).first()
 
         if not issue:
-            return jsonify({"status":"error","message":"Issue Not Found."})
+            return jsonify({"status":"error","message":"Issue Not Found."}), 404
         
         data={
                 "user":issue.name.id,
@@ -168,10 +174,10 @@ def issueSpecific():
                 "createdAt":issue.createdAt
             }
         
-        return jsonify({"status":"success","message":"Issue Retrieved Successfully.","data":data})
+        return jsonify({"status":"success","message":"Issue Retrieved Successfully.","data":data}), 200
     
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"})
+        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
     
     
 @issueBp.post("/issue/update")
@@ -180,20 +186,32 @@ def issueUpdate():
         id = request.args.get("id")
 
         if not id:
-            return jsonify({"status": "error", "message": "Id is required."})
+            return jsonify({"status": "error", "message": "Id is required."}), 400
         
         issue=Issue.objects(id=id).first()
 
         if not issue:
-            return jsonify({"status":"error","message":"issue Not Found."})
+            return jsonify({"status":"error","message":"issue Not Found."}), 404 
         
-        issueUpdate=request.get_json()
+        issueData = request.get_json()
 
-        issueTitle=issueUpdate.get("issueTittle")
-        issueDescription=issueUpdate.get("issueDescription")
-        category=issueUpdate.get("category")
-        imagePath=issueUpdate.get("imagePath")
-        tags=issueUpdate.get("tags")
+        if not issueData:
+            return jsonify({
+                "status": "error",
+                "message": "Issue data is required."
+            }), 400
+
+        issueTitle=issueData.get("issueTittle")
+        issueDescription=issueData.get("issueDescription")
+        category=issueData.get("category")
+        imagePath=issueData.get("imagePath")
+        tags=issueData.get("tags")
+
+        if not issueTitle or not issueDescription or not category:
+            return jsonify({
+                "status": "error",
+                "message": "Issue title, description and category are required."
+            }), 400
 
         issue.issueTitle=issueTitle
         issue.Description=issueDescription
@@ -203,10 +221,10 @@ def issueUpdate():
 
         issue.save()
 
-        return jsonify({"status":"success","message":"Issue Updated Successfully."})
+        return jsonify({"status":"success","message":"Issue Updated Successfully."}), 400 
         
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"})
+        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
     
 @issueBp.post("/issue/status")
 def issueStatusUpdate():
@@ -214,26 +232,33 @@ def issueStatusUpdate():
         id = request.args.get("id")
 
         if not id:
-            return jsonify({"status": "error", "message": "Id Is Required."})
+            return jsonify({"status": "error", "message": "Id Is Required."}), 400
         
         status=request.args.get("status")
 
         if not status:
-            return jsonify({"status": "error", "message": "Status Is Required."})
+            return jsonify({"status": "error", "message": "Status Is Required."}), 400
+        
+        allowed_statuses = ["Reported", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+        if status not in allowed_statuses:
+            return jsonify({
+                "status": "error",
+                "message": f"Invalid status. Allowed: {allowed_statuses}"
+            }), 400
         
         issue=Issue.objects(id=id).first()
 
         if not issue:
-            return jsonify({"status":"error","message":"issue Not Found."})
+            return jsonify({"status":"error","message":"issue Not Found."}), 404 
         
         issue.status=status
 
         issue.save()
 
-        return jsonify({"status":"success","message":"Issue's Status Updated Successfully."})
+        return jsonify({"status":"success","message":"Issue's Status Updated Successfully."}), 200
     
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"})
+        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
     
 @issueBp.delete("/issue/delete")
 def issueDelete():
@@ -241,16 +266,16 @@ def issueDelete():
         id = request.args.get("id")
 
         if not id:
-            return jsonify({"status": "error", "message": "Id Is Required."}) 
+            return jsonify({"status": "error", "message": "Id Is Required."}), 400 
         
         issue=Issue.objects(id=id).first()
 
         if not issue:
-            return jsonify({"status":"error","message":"issue Not Found."})
+            return jsonify({"status":"error","message":"issue Not Found."}), 404
         
         issue.delete()
 
-        return jsonify({"status":"success","message":"Issue Deleted Successfully."})
+        return jsonify({"status":"success","message":"Issue Deleted Successfully."}), 200
     
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"})
+        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
