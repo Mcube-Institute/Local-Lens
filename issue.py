@@ -131,14 +131,18 @@ def allIssues():
 
         for issue in issues:
             data={
-                "user":issue.name.id,
-                "issueTittle" :issue.issueTitle,
+                "user": {
+                    "id": issue.user.id,
+                    "name": issue.user.name,
+                    "email": issue.user.email
+                    },
+                "issueTittle" :issue.issueTittle,
                 "issueDescription":issue.issueDescription,
                 "category":issue.category,
-                "location":issue.location,
+                "location":issue.location.id,
                 "imagePath":issue.imagePath,
                 "status":issue.status,
-                "assignedTo":issue.assignedTo,
+                "assignedTo":issue.assignedTo.id,
                 "createdAt":issue.createdAt
             }
 
@@ -149,7 +153,7 @@ def allIssues():
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
 
-@issueBp.get("/issue/getspecific")
+@issueBp.get("/issue/getSpecific")
 def issueSpecific():
     try:
         id = request.args.get("id")
@@ -163,14 +167,18 @@ def issueSpecific():
             return jsonify({"status":"error","message":"Issue Not Found."}), 404
         
         data={
-                "user":issue.name.id,
-                "issueTittle" :issue.issueTitle,
+                "user": {
+                    "id": issue.user.id,
+                    "name": issue.user.name,
+                    "email": issue.user.email
+                    },
+                "issueTittle" :issue.issueTittle,
                 "issueDescription":issue.issueDescription,
                 "category":issue.category,
-                "location":issue.location,
+                "location":issue.location.id,
                 "imagePath":issue.imagePath,
                 "status":issue.status,
-                "assignedTo":issue.assignedTo,
+                "assignedTo":issue.assignedTo.id,
                 "createdAt":issue.createdAt
             }
         
@@ -221,7 +229,7 @@ def issueUpdate():
 
         issue.save()
 
-        return jsonify({"status":"success","message":"Issue Updated Successfully."}), 400 
+        return jsonify({"status":"success","message":"Issue Updated Successfully."}), 200 
         
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
