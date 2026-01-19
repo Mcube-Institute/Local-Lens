@@ -1,5 +1,6 @@
-from flask import Blueprint,request,jsonify
-from models import Issue,User,Location,Role
+from flask import Blueprint,request,jsonify,session
+from models import Issue,User,Location,Role,IssueStatusHistory
+from datetime import datetime
 
 issueBp=Blueprint("issueBp",__name__)
 
@@ -75,7 +76,7 @@ def newIssue():
                 "message": "Issue title, description and category are required."
             }), 400
 
-        userId = request.args.get("userId")
+        userId =session.get("user").get("id")
 
         if not userId:
             return jsonify({"status": "error", "message": "userId is required."}), 400
@@ -247,21 +248,55 @@ def issueStatusUpdate():
         if not status:
             return jsonify({"status": "error", "message": "Status Is Required."}), 400
         
-        allowed_statuses = ["Reported", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+        allowed_statuses = ["REPORTED", "IN_PROGRESS", "RESOLVED", "CLOSED"]
         if status not in allowed_statuses:
             return jsonify({
                 "status": "error",
                 "message": f"Invalid status. Allowed: {allowed_statuses}"
             }), 400
         
+        rejectedReason=""
+        
+        if status == "CLOSED":
+
+            reason=request.get_json()
+
+            rejectedReason=reason.get("rejectedReason")
+
+        resolvedAt=""
+
+        if status == "RESOLVED":
+            resolvedAt=datetime.now()
+        
         issue=Issue.objects(id=id).first()
 
         if not issue:
             return jsonify({"status":"error","message":"issue Not Found."}), 404 
         
+        prevStatus=issue.status
+        
         issue.status=status
 
         issue.save()
+    
+        userId =session.get("user").get("id")
+
+        if not userId:
+            return jsonify({"status": "error", "message": "userId is required."}), 400
+        
+        updatedBy=User.objects(id=userId).first()
+
+        if not updatedBy:
+            return jsonify({"status":"error","message":"User Not Found."}), 404
+        
+        IssueStatusHistory(
+            issue=id,
+            prevStatus=prevStatus,
+            nextStatus=status,
+            updatedBy=updatedBy.id,
+            rejectedReason=rejectedReason or None,
+            resolvedAt=resolvedAt or None
+        ).save()
 
         return jsonify({"status":"success","message":"Issue's Status Updated Successfully."}), 200
     

@@ -6,8 +6,11 @@ from role import roleBp
 from user import userBp
 from issue import issueBp
 from location import locationBp
+from issueStatusHistory import statusBp
 
 app=Flask(__name__)
+
+app.secret_key="3c2c6be4-f63c-428a-9cd5-e909ba3b0e2a"
 
 try:
     connect(host="mongodb://localhost:27017/localLens")
@@ -23,6 +26,7 @@ app.register_blueprint(roleBp)
 app.register_blueprint(userBp)
 app.register_blueprint(issueBp)
 app.register_blueprint(locationBp)
+app.register_blueprint(statusBp)
 
 @app.get("/")
 def home():

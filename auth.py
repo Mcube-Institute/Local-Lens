@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify
+from flask import Blueprint,request,jsonify,session
 from models import User
 
 authBp=Blueprint("authBp",__name__)
@@ -21,11 +21,17 @@ def register():
         if User.objects(email=email).first():
             return jsonify({"status":"error","message":"This Email Address Is Already Registered."}), 409 
         
-        User(
+        user=User(
             name=name,
             email=email,
             password=password
         ).save()
+
+        session["user"]={
+            "id":user.id,
+            "name":name,
+            "email":email
+        }
  
         return jsonify({"status": "success", "message": "User Registered Successfully."}), 201   
     except Exception as e:
@@ -52,6 +58,12 @@ def login():
 
         if not user:
             return jsonify({"status": "error", "message": "Invalid Email or Password."}), 401
+        
+        session["user"]={
+            "id":user.id,
+            "name":user.name,
+            "email":user.email
+        }
 
         return jsonify({"status": "success", "message": "Loggedin Successfully."}), 200
     
@@ -60,4 +72,7 @@ def login():
     
 @authBp.get("/auth/logOut")
 def logOut():
+    
+    session.clear()
+
     return jsonify({"status":"success","message":"Logged Out"}),200
