@@ -318,7 +318,7 @@ def issueStatusUpdate():
             newNotification(
                 user=user,
                 issue=issue,
-                message=f"Your Issue Is Now {status}."
+                message=f"Your Issue Has Been {status}."
             )
 
         elif status == "CLOSED":

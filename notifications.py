@@ -20,7 +20,7 @@ def getNotications():
         if not userId:
             return jsonify({"status":"error","message":"Unauthorized."}), 404
         
-        notifications=Notifications.objects(user=userId).order_by("-createdAt")
+        notifications=Notifications.objects(user=userId).order_by("-updatedAt")
 
         notificationList=[]
 
@@ -46,12 +46,12 @@ def notificationViewed():
         notificationId = request.args.get("id")
 
         if not notificationId:
-            return jsonify({"status": "error", "message": "Id required"}), 400
+            return jsonify({"status": "error", "message": "Id Required"}), 400
 
         notification = Notifications.objects(id=notificationId).first()
 
         if not notification:
-            return jsonify({"status": "error", "message": "Notification not found"}), 404
+            return jsonify({"status": "error", "message": "Notification Not Found"}), 404
 
         notification.isViewed = True
         notification.save()
