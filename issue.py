@@ -325,7 +325,7 @@ def issueStatusUpdate():
             newNotification(
                 user=user,
                 issue=issue,
-                message=f"Your Issue Is Now {status}:{rejectedReason}."
+                message=f"Your Issue Has Been {status}:{rejectedReason}."
             )
 
         return jsonify({"status":"success","message":"Issue's Status Updated Successfully."}), 200
