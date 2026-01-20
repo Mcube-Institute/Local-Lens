@@ -230,7 +230,7 @@ def issueUpdate():
             }), 400
 
         issue.issueTitle=issueTitle
-        issue.Description=issueDescription
+        issue.IssueDescription=issueDescription
         issue.category=category
         issue.imagePath=imagePath
         issue.tags=tags
