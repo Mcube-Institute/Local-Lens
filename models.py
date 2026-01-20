@@ -37,7 +37,7 @@ class Issue(Document):
     location = ReferenceField(Location, required=True)
     imagePath = URLField()
     tags = StringField()
-    status = StringField(default="Reported",choices=["REPORTED", "IN_PROGRESS", "RESOLVED", "CLOSED"])
+    status = StringField(default="REPORTED",choices=["REPORTED", "IN_PROGRESS", "RESOLVED", "CLOSED"])
     assignedTo = ReferenceField(User, required=True)
     createdAt = DateTimeField(default=datetime.now())
     updatedAt = DateTimeField()

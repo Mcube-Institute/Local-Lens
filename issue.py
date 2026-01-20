@@ -1,6 +1,7 @@
 from flask import Blueprint,request,jsonify,session
 from models import Issue,User,Location,Role,IssueStatusHistory
 from datetime import datetime
+from notifications import newNotification
 
 issueBp=Blueprint("issueBp",__name__)
 
@@ -114,6 +115,12 @@ def newIssue():
             tags=tags,
             assignedTo=assignedTo
         ).save()
+
+        newNotification(
+            user=assignedTo,
+            issue=Issue.objects(user=user).order_by('-createdAt').first(),
+            message=f"New Issue Assigned:{issueTittle}"
+        )
 
         return jsonify({"status":"success","message":"Issue Created Successfully."}), 201
     
@@ -297,6 +304,29 @@ def issueStatusUpdate():
             rejectedReason=rejectedReason or None,
             resolvedAt=resolvedAt or None
         ).save()
+
+        user=session.get("user").get("id")
+
+        if status == "IN_PROGRESS":
+            newNotification(
+                user=user,
+                issue=issue,
+                message=f"Your Issue Is Now {status}."
+            )
+
+        elif status == "RESOLVED":
+            newNotification(
+                user=user,
+                issue=issue,
+                message=f"Your Issue Is Now {status}."
+            )
+
+        elif status == "CLOSED":
+            newNotification(
+                user=user,
+                issue=issue,
+                message=f"Your Issue Is Now {status}:{rejectedReason}."
+            )
 
         return jsonify({"status":"success","message":"Issue's Status Updated Successfully."}), 200
     

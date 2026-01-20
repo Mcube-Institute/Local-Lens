@@ -7,6 +7,7 @@ from user import userBp
 from issue import issueBp
 from location import locationBp
 from issueStatusHistory import statusBp
+from notifications import notificationBp
 
 app=Flask(__name__)
 
@@ -27,6 +28,7 @@ app.register_blueprint(userBp)
 app.register_blueprint(issueBp)
 app.register_blueprint(locationBp)
 app.register_blueprint(statusBp)
+app.register_blueprint(notificationBp)
 
 @app.get("/")
 def home():
