@@ -1,5 +1,8 @@
 from flask import Blueprint,request,jsonify
-from  models import User,Role
+from  models import User,Role,Issue
+from issue import getNextAdmin
+from notifications import newNotification
+
 
 userBp=Blueprint("userBp",__name__)
 
@@ -141,6 +144,7 @@ def userUpdate():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"}), 500
     
+
 @userBp.delete("/user/delete")
 def userDelete():
     try:
@@ -149,14 +153,51 @@ def userDelete():
         if not id:
             return jsonify({"status": "error", "message": "Id is required."}), 400
 
-        user=User.objects(id=id).first()
+        user = User.objects(id=id).first()
 
         if not user:
-            return jsonify({"status":"error","message":"user Not Found."}), 404 
-        
+            return jsonify({"status": "error", "message": "User Not Found."}), 404
+
+        adminRole = Role.objects(name="Admin").first()
+
+        if user.role == adminRole:
+            
+            issues = Issue.objects(assignedTo=user)
+
+            for issue in issues:
+                nextAdmin = getNextAdmin()
+
+                if not nextAdmin:
+                    return jsonify({
+                        "status": "error",
+                        "message": "No other admins available to reassign issues."
+                    }), 503
+
+                issue.assignedTo = nextAdmin
+                issue.save()
+
+                
+                newNotification(
+                    user=nextAdmin,
+                    issue=issue,
+                    message=f"Issue reassigned after admin deletion: {issue.issueTittle}"
+                )
+
+            
+            if user.lastAssigned:
+                user.lastAssigned = False
+                user.save()
+                getNextAdmin()  
+
         user.delete()
 
-        return({"status":"success","messge":"User Deleted Successfully."}), 200
-    
+        return jsonify({
+            "status": "success",
+            "message": "User deleted and issues reassigned successfully."
+        }), 200
+
     except Exception as e:
-        return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
+        return jsonify({
+            "status": "error",
+            "message": f"Error {str(e)}"
+        }), 500

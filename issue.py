@@ -278,23 +278,26 @@ def issueStatusUpdate():
         issue=Issue.objects(id=id).first()
 
         if not issue:
-            return jsonify({"status":"error","message":"issue Not Found."}), 404 
+            return jsonify({"status":"error","message":"issue Not Found."}), 404
+        
+        userId=session.get("user").get("id")
+
+        if not userId:
+            return jsonify({"status": "error", "message": "userId is required."}), 400
+
+        if not userId==issue.assignedTo.id:
+            return jsonify({"status":"error","message":"Only Assigned Admin Can Edit IssueStatus."})
+        
+        updatedBy=User.objects(id=userId).first()
+
+        if not updatedBy:
+            return jsonify({"status":"error","message":"User Not Found."}), 404
         
         prevStatus=issue.status
         
         issue.status=status
 
         issue.save()
-    
-        userId =session.get("user").get("id")
-
-        if not userId:
-            return jsonify({"status": "error", "message": "userId is required."}), 400
-        
-        updatedBy=User.objects(id=userId).first()
-
-        if not updatedBy:
-            return jsonify({"status":"error","message":"User Not Found."}), 404
         
         IssueStatusHistory(
             issue=id,
@@ -305,25 +308,23 @@ def issueStatusUpdate():
             resolvedAt=resolvedAt or None
         ).save()
 
-        user=session.get("user").get("id")
-
         if status == "IN_PROGRESS":
             newNotification(
-                user=user,
+                user=issue.user.id,
                 issue=issue,
                 message=f"Your Issue Is Now {status}."
             )
 
         elif status == "RESOLVED":
             newNotification(
-                user=user,
+                user=issue.user.id,
                 issue=issue,
                 message=f"Your Issue Has Been {status}."
             )
 
         elif status == "CLOSED":
             newNotification(
-                user=user,
+                user=issue.user.id,
                 issue=issue,
                 message=f"Your Issue Has Been {status}:{rejectedReason}."
             )
