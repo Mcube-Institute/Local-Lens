@@ -35,7 +35,7 @@ class Issue(Document):
     issueDescription = StringField(required=True)
     category = StringField(required=True)
     location = ReferenceField(Location, required=True)
-    imagePath = URLField()
+    attachments = ListField(StringField())
     tags = StringField()
     status = StringField(default="REPORTED",choices=["REPORTED", "IN_PROGRESS", "RESOLVED", "CLOSED"])
     assignedTo = ReferenceField(User, required=True)

@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalLens</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- nav bar -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md p-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bolder">LocalLens</a>
+
+            <!-- Collapse toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="d-flex gap-4 text-white align-items-center fw-semibold ms-auto flex-wrap-sm">
+
+                    <p class="mb-0">Hi, <span class="user">Vengadachalapathi A</span></p>
+
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        <i class="bi bi-info-lg"></i>
+                    </button>
+
+
+                    <button type="button" class="btn btn-secondary position-relative" data-bs-toggle="offcanvas"
+                        data-bs-target="#notificationModal">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
+                        </span>
+                    </button>
+                    <a href="/login" class="btn btn-primary log px-3 py-1">LogIn</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="hero px-5 py-5">
+        <section class="welcome nuemorphism reveal">
+            <h2 class="reveal">Welcome To LocalLens</h2>
+            <p class="reveal">Report, Track And Monitor Issues In Your Locality.</p>
+            <div class="btnGroup reveal">
+                <button type="button" class="btn btn-primary reportNew px-4  py-2 " data-bs-toggle="modal"
+                    data-bs-target="#reportIssueModal"><i class="bi bi-plus-circle-dotted"></i> Report New
+                    Issue</button>
+                <a role="button"
+                    class="btn btn-outline-secondary viewIssue px-4 py-2 d-flex align-items-center justify-content-center gap-1"
+                    href="#myIssue"><i class="bi bi-view-stacked"></i>My Issues</a>
+                <a role="button"
+                    class="btn btn-outline-secondary viewIssue px-4 py-2 d-flex align-items-center justify-content-center gap-1"
+                    href="#localIssue"><i class="bi bi-view-stacked"></i>Local Issues</a>
+            </div>
+        </section>
+
+        <section class="track py-5">
+            <div class="row g-4">
+                <div class="col-12 col-sm-6 col-lg-3 reveal">
+                    <div class="total nuemorphism h-100 ">
+                        <h5 class="reveal">Total Issues</h5>
+                        <p class="totalCount reveal">12</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3 reveal">
+                    <div class="inprogress nuemorphism h-100 ">
+                        <h5 class="reveal">In Progress</h5>
+                        <p class="inprogressCount reveal">5</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3 reveal">
+                    <div class="resolved nuemorphism h-100 ">
+                        <h5 class="reveal">Resolved</h5>
+                        <p class="resolvedCount reveal">3</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3 reveal">
+                    <div class="closed nuemorphism h-100 ">
+                        <h5 class="reveal">Closed</h5>
+                        <p class="closedCount reveal">4</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="myIssue nuemorphism reveal" id="myIssue">
+            <h2 class="reveal">
+                My Issues
+            </h2>
+            <div class="issueArea" id="myIssueContainer">
+                <!-- <div class="emptyIssue reveal">
+                    <i class="bi bi-inbox-fill reveal"></i>
+                    <p class="reveal">No Issues Reported Yet.</p>
+                    <button type="button" class="btn btn-primary reportNew px-4  py-2 reveal" data-bs-toggle="modal"
+                        data-bs-target="#reportIssueModal"><i class="bi bi-plus-circle-dotted"></i> Report New
+                        Issue</button>
+                </div> -->
+            </div>
+        </section>
+
+        <section class="localIssue nuemorphism reveal" id="localIssue">
+            <h2 class="reveal">
+                Issues In Your Locality
+            </h2>
+            <div class="issueArea" id="localIssueContainer">
+                <!-- <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div>
+                <div class="issue">
+                    <div class="issueTop p-2 pe-0">
+                        <h4 class="issueTittle reveal ">Road Damage Near School</h4>
+                        <h5 class="status statusProgress reveal">IN PROGRESS</h5>
+                    </div>
+                    <div class="issueBottom p-2 px-0 pe-1 pb-0">
+                        <p class="reveal p-3 px-2">Category : <span class="category">Infrastructure</span></p>
+                        <a role="button"
+                            class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover reveal"
+                            data-bs-toggle="modal" data-bs-target="#viewIssueModal">
+                            VIEW
+                        </a>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+
+    </section>
+
+    <!-- Models -->
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Useful Tips & Status TimeLine</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="bg-white rounded shadow p-4 mt-4 reveal">
+                        <h6 class="fw-bold mb-3"><i class="bi bi-lightbulb"></i> Useful Tips</h6>
+                        <ul class="small text-muted mb-0">
+                            <li class="mb-2">Add clear photos to get faster resolution.</li>
+                            <li class="mb-2">Track issue status regularly from this page.</li>
+                            <li class="mb-2">Issues marked <b>IN PROGRESS</b> are being handled.</li>
+                            <li>Provide an accurate location so the issue can be resolved without delays.</li>
+                            <li>Avoid reporting the same issue multiple times to prevent duplication.</li>
+                        </ul>
+                    </div>
+                    <div class="col pt-2 reveal">
+                        <div class="bg-white rounded shadow p-4">
+                            <h5 class="fw-bold mb-3">Status Timeline</h5>
+                            <ul class="list-group list-group-flush small">
+                                <li class="list-group-item">📝 REPORTED</li>
+                                <li class="list-group-item"><i class="bi bi-tools"></i> IN PROGRESS</li>
+                                <li class="list-group-item text-muted">⏳ RESOLVED</li>
+                                <li class="list-group-item text-muted">🔒 CLOSED</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reportIssueModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Report Issue</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="g-3 issueCreation" id="issueForm">
+
+                        <!-- Issue Title -->
+                        <div class="mb-3 row">
+                            <label for="issueTittle" class="col-sm-2 col-form-label">Issue Title</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="issueTittle" name="issueTittle"
+                                    placeholder="Road Damage Near School" required>
+                            </div>
+                        </div>
+
+                        <!-- Issue Description -->
+                        <div class="mb-3 row">
+                            <label for="issueDescription" class="col-sm-2 col-form-label">Issue Description</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control"
+                                    placeholder="Road near govt school has multiple potholes causing traffic issues."
+                                    id="issueDescription" style="height: 100px" name="issueDescription" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Category & Tags -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="mb-3 row">
+                                    <label for="category" class="col-sm-4 col-form-label">Category</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="category"
+                                            placeholder="Infrastructure" name="category" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="mb-3 row">
+                                    <label for="tags" class="col-sm-2 col-form-label">Tags</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="tags" name="tags" placeholder="Potholes"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attachments -->
+                        <div class="mb-3 row">
+                            <label for="attachments" class="col-sm-2 col-form-label">Attachments</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="file" id="attachments" name="attachments" multiple required>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3 row">
+                            <label for="street" class="col-sm-2 col-form-label">Address</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" placeholder="Sourashtra Middle Street, Pudukkudi"
+                                    id="street" style="height: 40px" name="street" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- City & State -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="mb-3 row">
+                                    <label for="city" class="col-sm-4 col-form-label">City</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="Tirunelveli"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="mb-3 row">
+                                    <label for="state" class="col-sm-2 col-form-label">State</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="state" name="state" placeholder="Tamil Nadu"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Country & Pincode -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="mb-3 row">
+                                    <label for="country" class="col-sm-4 col-form-label">Country</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="country" name="country" placeholder="India"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="mb-3 row">
+                                    <label for="pincode" class="col-sm-2 col-form-label">Pincode</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control pincode-input" id="pincode"
+                                            placeholder="627417" maxlength="6" minlength="6" name="pincode" inputmode="numeric" pattern="[0-9]{6}"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+
+    <div class="modal fade" id="viewIssueModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border border-0">
+                    <h1 class="modal-title fs-5 issueTittle" id="staticBackdropLabel">Road Damage Near School</h1>
+                    <div class="modalHeaderLeft">
+                        <h5 class="status reveal">IN PROGRESS</h5>
+                        <p class="reveal">Reported On: <span class="reportedOn">12 Jan 2026</span></p>
+                    </div>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body row gap-2">
+                    <div class="description">
+                        <h4 class="reveal">Description</h4>
+                        <p class="reveal issueDescription">The road near the government school has multiple potholes
+                            causing traffic issues.</p>
+                    </div>
+                    <div class="category">
+                        <h4 class="reveal">Category</h4>
+                        <p class="reveal issueCategory">Infrastructure</p>
+                    </div>
+                    <div class="location">
+                        <h4 class="reveal">Location</h4>
+                        <p class="reveal">
+                            <span class="street">2,East car street,Pudukkudi</span>,
+                            <span class="city">Tirunelveli</span>,
+                            <span class="state">TamilNadu</span>
+                            <span class="country">India</span>-
+                            <span class="pincode">627417</span>.
+
+                        </p>
+                    </div>
+                    <div class="attachments">
+                        <h4 class="reveal">Attachments</h4>
+                        <div class="imageGroup pt-2">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                            <img src="../static/images/pexels-fotios-photos-909504 1.png" alt="attachments"
+                                class="attachments">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Off Canvas -->
+    <div class="offcanvas offcanvas-end text-primary-emphasis bg-primary-subtle" data-bs-backdrop="static" tabindex="-1"
+        id="notificationModal" aria-labelledby="staticBackdropLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="staticBackdropLabel">Notifications</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <!-- Nav Tab -->
+            <ul class="nav nav-tabs mb-3" id="notificationTabs" role="tablist">
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all"
+                        type="button" role="tab" aria-controls="all" aria-selected="true">
+                        ALL
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reported-tab" data-bs-toggle="tab" data-bs-target="#reported"
+                        type="button" role="tab" aria-controls="reported" aria-selected="false">
+                        REPORTED
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="progress-tab" data-bs-toggle="tab" data-bs-target="#progress"
+                        type="button" role="tab" aria-controls="progress" aria-selected="false">
+                        IN PROGRESS
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="resolved-tab" data-bs-toggle="tab" data-bs-target="#resolved"
+                        type="button" role="tab" aria-controls="resolved" aria-selected="false">
+                        RESOLVED
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="closed-tab" data-bs-toggle="tab" data-bs-target="#closed" type="button"
+                        role="tab" aria-controls="closed" aria-selected="false">
+                        CLOSED
+                    </button>
+                </li>
+
+            </ul>
+
+
+
+
+            <!-- Tab Content -->
+
+            <div class="tab-content" id="notificationTabsContent">
+
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+
+                    <div class="notificationItem unread reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Road Damage
+                            </div>
+
+                            <div class="notificationStatus">
+                                <span class="statusOld statusReported px-1 text-nowrap">REPORTED</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusProgress px-1 text-nowrap">IN PROGRESS</span>
+                            </div>
+                        </div>
+
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+                    <div class="notificationItem  reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Light Not Working
+                            </div>
+                            <div class="notificationStatus">
+                                <span class="statusOld statusReported px-1 text-nowrap">REPORTED</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusProgress px-1 text-nowrap">IN PROGRESS</span>
+                            </div>
+                        </div>
+
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+
+                    <div class="notificationItem  reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Large pothole near bus stop
+                            </div>
+                            <div class="notificationStatus">
+                                <span class="statusOld statusProgress px-1 text-nowrap">IN PROGRESS</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusResolved px-1 text-nowrap">RESOLVED</span>
+                            </div>
+                        </div>
+
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+                    <div class="notificationItem  reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Water pipe leakage
+                            </div>
+                            <div class="notificationStatus">
+                                <span class="statusOld statusProgress">IN PROGRESS</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusResolved px-1 text-nowrap">RESOLVED</span>
+                            </div>
+                        </div>
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- REPORTED -->
+                <div class="tab-pane fade" id="reported" role="tabpanel" aria-labelledby="reported-tab">
+                    <!-- only REPORTED notifications -->
+
+                    <p class="d-flex justify-content-center">Empty</p>
+                </div>
+
+                <!-- IN PROGRESS -->
+                <div class="tab-pane fade" id="progress" role="tabpanel" aria-labelledby="progress-tab">
+                    <!-- only IN PROGRESS notifications -->
+
+                    <div class="notificationItem unread reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Road Damage
+                            </div>
+
+                            <div class="notificationStatus">
+                                <span class="statusOld statusReported px-1 text-nowrap">REPORTED</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusProgress px-1 text-nowrap">IN PROGRESS</span>
+                            </div>
+                        </div>
+
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+                    <div class="notificationItem  reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Light Not Working
+                            </div>
+                            <div class="notificationStatus">
+                                <span class="statusOld statusReported px-1 text-nowrap">REPORTED</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusProgress px-1 text-nowrap">IN PROGRESS</span>
+                            </div>
+                        </div>
+
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESOLVED -->
+                <div class="tab-pane fade" id="resolved" role="tabpanel" aria-labelledby="resolved-tab">
+                    <!-- only RESOLVED notifications -->
+
+                    <div class="notificationItem  reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Large pothole near bus stop
+                            </div>
+                            <div class="notificationStatus">
+                                <span class="statusOld statusProgress px-1 text-nowrap">IN PROGRESS</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusResolved px-1 text-nowrap">RESOLVED</span>
+                            </div>
+                        </div>
+
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+                    <div class="notificationItem  reveal">
+                        <div class="notificationHeader">
+                            <div class="notificationTitle">
+                                Water pipe leakage
+                            </div>
+                            <div class="notificationStatus">
+                                <span class="statusOld statusProgress">IN PROGRESS</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="statusNew statusResolved px-1 text-nowrap">RESOLVED</span>
+                            </div>
+                        </div>
+                        <div class="notificationTime">
+                            12:30 AM · 12 Jan
+                        </div>
+
+                        <div class="notificationMessage">
+                            Admin has started working on this issue.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLOSED -->
+            <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+                <!-- only CLOSED notifications -->
+
+                <p class="d-flex justify-content-center">Empty</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
+        integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
+
+    <script src="../static/js/script.js"></script>
+</body>
+
+</html>

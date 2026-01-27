@@ -29,15 +29,16 @@ def newLocation():
                 "message": "Invalid pincode. Must be 6 digits."
             }), 400
     
-        Location(
+        locat=Location(
             street=street,
             city=city,
             state=state,
             country=country,
             pincode=pincode
-        ).save()
+        )
+        locat.save()
 
-        return jsonify({"status":"success","message":"Location Added Successfully."}), 201
+        return jsonify({"status":"success","message":"Location Added Successfully.","data": { "id": str(locat.id) }}), 201
 
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"}), 500

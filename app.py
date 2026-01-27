@@ -1,4 +1,4 @@
-from flask import Flask,request,render_template,jsonify
+from flask import Flask,request,render_template,jsonify,session,redirect
 from mongoengine import connect,connection
 from models import *
 from auth import authBp
@@ -33,6 +33,31 @@ app.register_blueprint(notificationBp)
 @app.get("/")
 def home():
     return render_template("index.html")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
+
+@app.get("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+DEV_ISSUE_BYPASS = True
+
+@app.before_request
+def temp_issue_creation_session():
+    if DEV_ISSUE_BYPASS and request.path == "/issue/new" and "user" not in session:
+        session["user"] = {
+            "id": "5c800c6b-7297-4366-b308-984f4af3870d",
+            "name": "SomeOne",
+            "email": "some@one.com"
+        }
 
 if __name__=="__main__":
     app.run(debug=True)

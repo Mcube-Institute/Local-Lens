@@ -15,10 +15,11 @@ def newNotification(user,issue,message):
 @notificationBp.get("/notification/getAll")
 def getNotications():
     try:
-        userId=session.get("user").get("id")
+        currentUser = session.get("user")
+        if not currentUser:
+            return jsonify({"status":"error","message":"Login required"}), 401
 
-        if not userId:
-            return jsonify({"status":"error","message":"Unauthorized."}), 404
+        userId = currentUser["id"]
         
         notifications=Notifications.objects(user=userId).order_by("-updatedAt")
 

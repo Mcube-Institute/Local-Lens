@@ -2,6 +2,7 @@ from flask import Blueprint,request,jsonify,session
 from models import Issue,User,Location,Role,IssueStatusHistory
 from datetime import datetime
 from notifications import newNotification
+import base64
 
 issueBp=Blueprint("issueBp",__name__)
 
@@ -56,11 +57,15 @@ def getNextAdmin():
 
     return nextAdmin
 
+import os
+import uuid
+UPLOAD_FOLDER = "static/uploads/issues"
 
 @issueBp.post("/issue/new")
 def newIssue():
     try:
-        issue=request.get_json()
+        issue=request.form
+        print(issue)
 
         if not issue:
             return jsonify({"status":"error","message":"All Fields Required."}), 400
@@ -68,7 +73,6 @@ def newIssue():
         issueTittle=issue.get("issueTittle")
         issueDescription=issue.get("issueDescription")
         category=issue.get("category")
-        imagePath=issue.get("imagePath")
         tags=issue.get("tags")
 
         if not issueTittle or not issueDescription or not category:
@@ -76,11 +80,38 @@ def newIssue():
                 "status": "error",
                 "message": "Issue title, description and category are required."
             }), 400
+        
+        attachments=request.files.getlist("attachments")
+        if not attachments:
+            return jsonify({"status": "error", "message": "No files uploaded"}), 400
 
-        userId =session.get("user").get("id")
+        result = []
 
-        if not userId:
-            return jsonify({"status": "error", "message": "userId is required."}), 400
+        # for file in attachments:
+        #     binary_data = file.read()
+        #     base64_data = base64.b64encode(binary_data).decode("utf-8")
+
+        #     data_url = f"data:{file.content_type};base64,{base64_data}"
+        #     result.append(data_url)
+
+        for file in attachments:
+            ext = file.filename.rsplit(".", 1)[-1]
+            filename = f"{uuid.uuid4()}.{ext}"
+
+            save_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(save_path)
+
+            file_url = f"/static/uploads/issues/{filename}"
+            result.append(file_url)
+
+
+
+        currentUser = session.get("user")
+        if not currentUser:
+            return jsonify({"status":"error","message":"Login required"}), 401
+
+        userId = currentUser["id"]
+
         
         user=User.objects(id=userId).first()
 
@@ -95,10 +126,9 @@ def newIssue():
         if not user:
             return jsonify({"status":"error","message":"User Not Found."}), 404
         
-        locationId = request.args.get("locationId")
-
+        locationId = issue.get("locationId")
         if not locationId:
-            return jsonify({"status": "error", "message": "locationId is required."}), 400
+            return jsonify({"status":"error","message":"locationId is required"}),400
         
         location=Location.objects(id=locationId).first()
 
@@ -111,7 +141,7 @@ def newIssue():
             issueDescription=issueDescription,
             category=category,
             location=location,
-            imagePath=imagePath,
+            attachments=result,
             tags=tags,
             assignedTo=assignedTo
         ).save()
@@ -132,13 +162,14 @@ def allIssues():
     try:
         issues=Issue.objects()
 
-        if not issues:
-            return jsonify({"status":"error","message":"Issues Are Empty."}), 200
+        """ if not issues:
+            return jsonify({"status":"error","message":"Issues Are Empty."}), 200 """
         
         issueList=[]
 
         for issue in issues:
             data={
+                "id": issue.id,
                 "user": {
                     "id": issue.user.id,
                     "name": issue.user.name,
@@ -148,7 +179,7 @@ def allIssues():
                 "issueDescription":issue.issueDescription,
                 "category":issue.category,
                 "location":issue.location.id,
-                "imagePath":issue.imagePath,
+                "imagePath":issue.attachments,
                 "status":issue.status,
                 "assignedTo":issue.assignedTo.id,
                 "createdAt":issue.createdAt
@@ -184,7 +215,7 @@ def issueSpecific():
                 "issueDescription":issue.issueDescription,
                 "category":issue.category,
                 "location":issue.location.id,
-                "imagePath":issue.imagePath,
+                "imagePath":issue.attachments,
                 "status":issue.status,
                 "assignedTo":issue.assignedTo.id,
                 "createdAt":issue.createdAt
@@ -280,10 +311,11 @@ def issueStatusUpdate():
         if not issue:
             return jsonify({"status":"error","message":"issue Not Found."}), 404
         
-        userId=session.get("user").get("id")
+        currentUser = session.get("user")
+        if not currentUser:
+            return jsonify({"status":"error","message":"Login required"}), 401
 
-        if not userId:
-            return jsonify({"status": "error", "message": "userId is required."}), 400
+        userId = currentUser["id"]
 
         if not userId==issue.assignedTo.id:
             return jsonify({"status":"error","message":"Only Assigned Admin Can Edit IssueStatus."})

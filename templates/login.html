@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | LocalLens</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body class="authBody">
+
+  <div class="authWrapper">
+    <div class="authCard nuemorphism">
+
+      <h2 class="authTitle">Welcome Back</h2>
+      <p class="authSubtitle">Login to continue using LocalLens</p>
+
+      <form loginForm>
+        <div class="mb-3">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" placeholder="you@email.com" name="email" id="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" placeholder="••••••••" name="password" id="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-2">
+          Login
+        </button>
+      </form>
+
+      <p class="authFooter">
+        Don’t have an account?
+        <a href="/register">Create one</a>
+      </p>
+
+    </div>
+  </div>
+
+  <script src="../static/js/script.js"></script>
+
+      <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
+        integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
+
+</body>
+</html>
