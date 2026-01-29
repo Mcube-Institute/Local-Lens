@@ -40,24 +40,31 @@ def login():
 
 @app.route("/register")
 def register():
-    return render_template("register.html")
+    return render_template("register.html")    
 
+@app.context_processor
+def loadData():
+    isLogIn=True
+    sessionUser = session.get("user")
 
-@app.get("/logout")
-def logout():
-    session.clear()
-    return redirect("/login")
+    if not sessionUser:
+        isLogIn=False
+        return {"isLogIn":isLogIn}
 
-DEV_ISSUE_BYPASS = True
+    userId = sessionUser["id"]
+    user=User.objects(id=userId).first()
 
-@app.before_request
-def temp_issue_creation_session():
-    if DEV_ISSUE_BYPASS and request.path == "/issue/new" and "user" not in session:
-        session["user"] = {
-            "id": "5c800c6b-7297-4366-b308-984f4af3870d",
-            "name": "SomeOne",
-            "email": "some@one.com"
-        }
+    if not user:
+        return jsonify({"status":"error","message":"User Not Found."}), 404
+    
+    userData={
+        "id":str(user.id),
+        "name":user.name,
+        "email":user.email,
+        "isLogIn":isLogIn
+    }
+
+    return userData
 
 if __name__=="__main__":
     app.run(debug=True)

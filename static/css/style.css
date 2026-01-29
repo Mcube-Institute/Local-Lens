@@ -296,6 +296,16 @@ body {
     color: #334155;
 }
 
+.dropdown-menu-dark{
+    background-color: var(--brand-muted) !important;
+}
+
+.dropdown-menu li{
+    font-family: "Playfair Display", serif !important;
+    font-size: 1.3rem;
+}
+
+
 .welcome {
     background-color: var(--bg--light);
     padding: 20px !important;
@@ -632,6 +642,20 @@ body {
 }
 
 .imageGroup img {
+    flex: 1 1 220px;
+    /* grow | shrink | base width */
+
+    max-width: calc(50% - 24px);
+    /* 👆 caps at 4 per row */
+
+    height: auto;
+    object-fit: cover;
+
+    border-radius: 10px;
+    padding: 0;
+}
+
+.imageGroup video{
     flex: 1 1 220px;
     /* grow | shrink | base width */
 

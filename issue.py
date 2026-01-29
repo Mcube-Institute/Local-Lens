@@ -147,10 +147,17 @@ def newIssue():
         ).save()
 
         newNotification(
+            user=user,
+            issue=Issue.objects(user=user).order_by('-createdAt').first(),
+            message=f"Issue Reported:{issueTittle}"
+        )
+
+        newNotification(
             user=assignedTo,
             issue=Issue.objects(user=user).order_by('-createdAt').first(),
             message=f"New Issue Assigned:{issueTittle}"
         )
+
 
         return jsonify({"status":"success","message":"Issue Created Successfully."}), 201
     
@@ -160,11 +167,22 @@ def newIssue():
 @issueBp.get("/issue/getAll")
 def allIssues():
     try:
-        issues=Issue.objects()
-
-        """ if not issues:
-            return jsonify({"status":"error","message":"Issues Are Empty."}), 200 """
+        isUser = request.args.get("isUser")
         
+        currentUser = session.get("user")
+        userId = currentUser["id"]
+        
+        user=User.objects(id=userId).first()
+        if not user:
+            return jsonify({"status":"error","message":"User Not Found."}), 404
+        
+        if isUser:
+            issues=Issue.objects(user=user)
+        else:
+            issues=Issue.objects()
+        
+        issues = issues.order_by("-createdAt")
+
         issueList=[]
 
         for issue in issues:

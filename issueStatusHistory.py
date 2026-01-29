@@ -16,7 +16,7 @@ def issueSatatusHistoryAll():
         if not issue:
             return jsonify({"status":"error","message":"Issue Not Found."}), 404
         
-        issueStatusHistory=IssueStatusHistory.objects(issue=issue)
+        issueStatusHistory = IssueStatusHistory.objects(issue=issue.id)
 
         issueStatusHistoryList=[]
 

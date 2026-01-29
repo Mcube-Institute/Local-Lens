@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify,session
+from flask import Blueprint,request,jsonify,session,redirect
 from models import User
 
 authBp=Blueprint("authBp",__name__)
@@ -75,4 +75,4 @@ def logOut():
     
     session.clear()
 
-    return jsonify({"status":"success","message":"Logged Out"}),200
+    return redirect("/")

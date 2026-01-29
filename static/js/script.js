@@ -92,34 +92,14 @@ function getIssues() {
         .then(data => {
             if (data.status == "success") {
                 const issues = data.data;
-                const myIssue = $("#myIssueContainer");
                 const localIssue = $("#localIssueContainer")
 
-                myIssue.empty();
                 localIssue.empty();
 
-                const userId = $(".user").data("userid");
 
                 issues.forEach(issue => {
-                    if (issue.user.id == userId) {
-                        myIssue.append(issueCard(issue));
-                    }
-                    else {
-                        localIssue.append(issueCard(issue));
-                    }
+                    localIssue.append(issueCard(issue));
                 })
-
-                if (myIssue.children().length === 0) {
-                    myIssue.html(`
-                       <div class="emptyIssue reveal">
-                    <i class="bi bi-inbox-fill reveal"></i>
-                    <p class="reveal">No Issues Reported Yet.</p>
-                    <button type="button" class="btn btn-primary reportNew px-4  py-2 reveal" data-bs-toggle="modal"
-                        data-bs-target="#reportIssueModal"><i class="bi bi-plus-circle-dotted"></i> Report New
-                        Issue</button>
-                        </div>
-                    `);
-                }
 
                 if (localIssue.children().length === 0) {
                     localIssue.html(`
@@ -141,21 +121,36 @@ function getIssues() {
         .catch(err => alert(err.message))
 }
 
-$(document).ready(getIssues);
-
-function getLocation(location) {
-    fetch(`/location/getSpecific?id=${location}`)
+function getUserIssues() {
+    fetch("/issue/getAll?isUser=true")
         .then(res => res.json())
         .then(data => {
             if (data.status == "success") {
-                const issueLocation = data.data;
-                const modal = $("#viewIssueModal");
-                modal.find(".street").text(issueLocation.street);
-                modal.find(".city").text(issueLocation.city);
-                modal.find(".state").text(issueLocation.state);
-                modal.find(".country").text(issueLocation.country);
-                modal.find(".pincode").text(issueLocation.pincode);
+                const issues = data.data;
+                const myIssue = $("#myIssueContainer");
+                myIssue.empty();
+
+
+                issues.forEach(issue => {
+                    myIssue.append(issueCard(issue));
+                })
+
+                if (myIssue.children().length === 0) {
+                    myIssue.html(`
+                       <div class="emptyIssue reveal">
+                    <i class="bi bi-inbox-fill reveal"></i>
+                    <p class="reveal">No Issues Reported Yet.</p>
+                    <button type="button" class="btn btn-primary reportNew px-4  py-2 reveal" data-bs-toggle="modal"
+                        data-bs-target="#reportIssueModal"><i class="bi bi-plus-circle-dotted"></i> Report New
+                        Issue</button>
+                        </div>
+                    `);
+                }
+
+                trackUpdate(issues);
+                $(".reveal").addClass("active")
             }
+
             else {
                 throw new Error(data.message);
             }
@@ -163,51 +158,99 @@ function getLocation(location) {
         .catch(err => alert(err.message))
 }
 
-$(document).on("click", ".view", function () {
+$(document).ready(getIssues);
+$(document).ready(getUserIssues);
+
+async function getLocation(location) {
+    try {
+        const res = await fetch(`/location/getSpecific?id=${location}`);
+        const data = await res.json();
+
+        if (data.status === "success") {
+            return data.data;
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (err) {
+        alert(err.message);
+        return null;
+    }
+}
+
+
+$(document).on("click", ".view", async function () {
 
     const stColorMap = {
         "REPORTED": "statusReported",
         "IN_PROGRESS": "statusProgress",
-        "RESOLVED": "statusReported",
+        "RESOLVED": "statusResolved",
         "CLOSED": "statusClosed"
     };
 
     const issueId = $(this).data("id");
 
-    fetch(`/issue/getSpecific?id=${issueId}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.status == "success") {
-                const issue = data.data;
-                attachments = issue.imagePath;
+    try {
+        const res = await fetch(`/issue/getSpecific?id=${issueId}`);
+        const data = await res.json();
 
-                const modal = $("#viewIssueModal");
+        if (data.status !== "success") {
+            throw new Error(data.message);
+        }
 
-                modal.find(".status")
-                    .removeClass("statusProgress statusReported statusResolved statusClosed");
-                modal.find(".status").addClass(stColorMap[issue.status]).text(issue.status.replace("_", " "));
-                $("#viewIssueModal .reportedOn").text(getDateTime(issue.createdAt));
-                $("#viewIssueModal .issueTittle").text(issue.issueTittle);
-                $("#viewIssueModal .issueDescription").text(issue.issueDescription);
-                $("#viewIssueModal .issueCategory").text(issue.category);
-                getLocation(issue.location)
+        const issue = data.data;
+        const attachments = issue.imagePath;
+        const modal = $("#viewIssueModal");
 
-                imageGroup = $(".imageGroup");
-                imageGroup.empty();
-                console.log(attachments)
+        modal.find(".status")
+            .removeClass("statusProgress statusReported statusResolved statusClosed")
+            .addClass(stColorMap[issue.status])
+            .text(issue.status.replace("_", " "));
 
-                for (let index = 0; index < attachments.length; index++) {
-                    imageGroup.append(`<img src="${attachments[index]}" alt="attachments"
-                                class="attachments">`)
-                }
+        modal.find(".reportedOn").text(getDateTime(issue.createdAt));
+        modal.find(".issueTittle").text(issue.issueTittle);
+        modal.find(".issueDescription").text(issue.issueDescription);
+        modal.find(".issueCategory").text(issue.category);
 
+        const issueLocation = await getLocation(issue.location);
+
+        if (issueLocation) {
+            modal.find(".street").text(issueLocation.street);
+            modal.find(".city").text(issueLocation.city);
+            modal.find(".state").text(issueLocation.state);
+            modal.find(".country").text(issueLocation.country);
+            modal.find(".pincode").text(issueLocation.pincode);
+        }
+
+        const imageGroup = $(".imageGroup");
+        imageGroup.empty();
+
+        attachments.forEach(file => {
+
+            const ext = file.split(".").pop().toLowerCase();
+
+            const imageExts = ["jpg", "jpeg", "png", "gif", "webp", "dng"];
+            const videoExts = ["mp4", "webm", "ogg"];
+
+            if (imageExts.includes(ext)) {
+                imageGroup.append(`
+            <img src="${file}" alt="attachment" class="attachments">
+        `);
             }
-            else {
-                throw new Error(data.message);
+            else if (videoExts.includes(ext)) {
+                imageGroup.append(`
+            <video class="attachments" controls>
+                <source src="${file}" type="video/${ext}">
+                Your browser does not support the video tag.
+            </video>
+        `);
             }
-        })
-        .catch(err => alert(err.message));
+        });
+
+    } catch (err) {
+        alert(err.message);
+    }
 });
+
 /*  Issue Creation   */
 
 function createLocation(locationData) {
@@ -229,6 +272,7 @@ function createIssue(data) {
             if (data.status == "success") {
                 $("#reportIssueModal").modal("hide");
                 getIssues();
+                refreshNotificationDot();
                 alert(data.message)
             }
             else {
@@ -280,11 +324,11 @@ $(".issueCreation").on("submit", function (e) {
                 return;
             }
 
-            if (files.length > 1) {
+            /* if (files.length > 1) {
                 for (let file of files) {
                     data.append("attachments", file);
                 }
-            }
+            } */
 
             console.log(data)
             createIssue(data)
@@ -296,34 +340,181 @@ $(".issueCreation").on("submit", function (e) {
 
 /* Notification */
 
-function notificationCard() {
+function getStatusFromMessage(message) {
+    const msg = message.toLowerCase();
+
+    if (msg.startsWith("issue reported")) {
+        return { prev: null, next: "REPORTED" };
+    }
+    if (msg.includes("now in_progress")) {
+        return { prev: "REPORTED", next: "IN_PROGRESS" };
+    }
+    if (msg.includes("been resolved")) {
+        return { prev: "IN_PROGRESS", next: "RESOLVED" };
+    }
+    if (msg.includes("been closed")) {
+        return { prev: "RESOLVED", next: "CLOSED" };
+    }
+    return null;
+}
+
+
+function notificationCard(n, issue) {
 
     const stColorMap = {
-        "REPORTED": "statusReported",
-        "IN_PROGRESS": "statusProgress",
-        "RESOLVED": "statusResolved",
-        "CLOSED": "statusClosed"
+        REPORTED: "statusReported",
+        IN_PROGRESS: "statusProgress",
+        RESOLVED: "statusResolved",
+        CLOSED: "statusClosed"
     };
 
-    return `<div class="notificationItem unread reveal">
-                        <div class="notificationHeader">
-                            <div class="notificationTitle">
-                                ${a}
-                            </div>
+    const flow = getStatusFromMessage(n.message);
 
-                            <div class="notificationStatus">
-                                <span class="statusOld statusReported px-1 text-nowrap">REPORTED</span>
-                                <i class="bi bi-arrow-right"></i>
-                                <span class="statusNew statusProgress px-1 text-nowrap">IN PROGRESS</span>
-                            </div>
-                        </div>
+    const statusHTML = !flow || !flow.prev
+        ? `<span class="statusNew ${stColorMap.REPORTED}">REPORTED</span>`
+        : `
+            <span class="statusOld ${stColorMap[flow.prev]}">
+                ${flow.prev.replace("_", " ")}
+            </span>
+            <i class="bi bi-arrow-right"></i>
+            <span class="statusNew ${stColorMap[flow.next]}">
+                ${flow.next.replace("_", " ")}
+            </span>
+          `;
 
-                        <div class="notificationTime">
-                            12:30 AM · 12 Jan
-                        </div>
+    return `
+        <div class="notificationItem ${!n.isViewed ? "unread" : ""}"
+             data-id="${n.id}">
 
-                        <div class="notificationMessage">
-                            Admin has started working on this issue.
-                        </div>
-                    </div>`
+            <div class="notificationHeader">
+                <div class="notificationTitle">
+                    ${issue.issueTittle}
+                </div>
+
+                <div class="notificationStatus">
+                    ${statusHTML}
+                </div>
+            </div>
+
+            <div class="notificationTime">
+                ${getDateTime(n.createdAt)}
+            </div>
+
+            <div class="notificationMessage">
+                ${n.message}
+            </div>
+        </div>
+    `;
 }
+
+
+async function refreshNotificationDot() {
+    const res = await fetch("/notification/getAll");
+    const data = await res.json();
+
+    if (data.status !== "success") return;
+
+    const hasUnread = data.data.some(n => !n.isViewed);
+
+    if (hasUnread) {
+        $("#notificationDot").show();
+    } else {
+        $("#notificationDot").hide();
+    }
+}
+
+
+async function loadNotifications() {
+    const res = await fetch("/notification/getAll");
+    const data = await res.json();
+    if (data.status !== "success") return;
+
+    const allTab = $("#all");
+    const reportedTab = $("#reported");
+    const progressTab = $("#progress");
+    const resolvedTab = $("#resolved");
+    const closedTab = $("#closed");
+
+    allTab.empty();
+    reportedTab.empty();
+    progressTab.empty();
+    resolvedTab.empty();
+    closedTab.empty();
+
+    for (let n of data.data) {
+
+        const issueRes = await fetch(`/issue/getSpecific?id=${n.issue}`);
+        const issueData = await issueRes.json();
+        if (issueData.status !== "success") continue;
+
+        const issue = issueData.data;
+        const card = notificationCard(n, issue);
+
+        allTab.append(card);
+
+        const msg = n.message.toLowerCase();
+
+        if (msg.startsWith("issue reported")) {
+            reportedTab.append(card);
+        }
+        else if (msg.includes("in_progress")) {
+            progressTab.append(card);
+        }
+        else if (msg.includes("resolved")) {
+            resolvedTab.append(card);
+        }
+        else if (msg.includes("closed")) {
+            closedTab.append(card);
+        }
+    }
+}
+
+
+$(document).on("click", ".notificationItem", async function () {
+    const id = $(this).data("id");
+
+    if (!$(this).hasClass("unread")) return;
+
+    await fetch(`/notification/view?id=${id}`, { method: "POST" });
+
+    $(this).removeClass("unread");
+
+    refreshNotificationDot();
+});
+
+
+$("#notificationModal").on("shown.bs.offcanvas", async function () {
+    await loadNotifications();
+});
+
+
+$(document).ready(() => {
+    refreshNotificationDot();
+});
+
+
+/*  LOGOUT  */
+function logOut() {
+    fetch("/auth/logOut")
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == "success") {
+                $(".logOut").addClass("visually-hidden");
+                $(".logIn").removeClass("visually-hidden");
+                window.location.replace("/");
+                alert(data.message)
+            }
+            else {
+                throw new Error(data.message);
+            }
+        })
+        .catch(err => {
+            alert(err)
+        })
+}
+
+$(".logOut").click(function (e) {
+    e.preventDefault();
+
+    logOut()
+});

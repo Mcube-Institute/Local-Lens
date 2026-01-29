@@ -25,8 +25,10 @@
             <!-- Collapsible content -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <div class="d-flex gap-4 text-white align-items-center fw-semibold ms-auto flex-wrap-sm">
-
-                    <p class="mb-0">Hi, <span class="user">Vengadachalapathi A</span></p>
+                    
+                    {% if isLogIn %}
+                    <p class="mb-0">Hi, <span class="user">{{name}} </span></p>
+                    {% endif %}
 
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop">
@@ -34,13 +36,34 @@
                     </button>
 
 
-                    <button type="button" class="btn btn-secondary position-relative" data-bs-toggle="offcanvas"
+                    <button class="btn btn-secondary position-relative" data-bs-toggle="offcanvas"
                         data-bs-target="#notificationModal">
                         <i class="bi bi-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
-                        </span>
+                        <span id="notificationDot"
+                            class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle"
+                            style="display:none;"></span>
                     </button>
-                    <a href="/login" class="btn btn-primary log px-3 py-1">LogIn</a>
+
+                    <div class="dropstart">
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            {% if isLogIn %}
+                            <li class="dropdown-item"><i class="bi bi-person-fill"></i><span class="user ps-2">{{name}}</span></li>
+                            <li class="dropdown-item"><i class="bi bi-envelope"></i><span class="email ps-2">{{email}}</span></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" class="logIn" href="/auth/logOut"><i class="bi bi-box-arrow-left pe-2"></i>logOut</a></li>
+                            {% endif %}
+
+                            {% if not isLogIn %}
+                            <li><a class="dropdown-item" class="logIn"  href="/login"><i class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
+                             {% endif %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -561,7 +584,8 @@
                             <div class="col-sm-10">
                                 <textarea class="form-control"
                                     placeholder="Road near govt school has multiple potholes causing traffic issues."
-                                    id="issueDescription" style="height: 100px" name="issueDescription" required></textarea>
+                                    id="issueDescription" style="height: 100px" name="issueDescription"
+                                    required></textarea>
                             </div>
                         </div>
 
@@ -581,8 +605,8 @@
                                 <div class="mb-3 row">
                                     <label for="tags" class="col-sm-2 col-form-label">Tags</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="tags" name="tags" placeholder="Potholes"
-                                            required>
+                                        <input type="text" class="form-control" id="tags" name="tags"
+                                            placeholder="Potholes" required>
                                     </div>
                                 </div>
                             </div>
@@ -592,7 +616,8 @@
                         <div class="mb-3 row">
                             <label for="attachments" class="col-sm-2 col-form-label">Attachments</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" id="attachments" name="attachments" multiple required>
+                                <input class="form-control" type="file" id="attachments" name="attachments" multiple
+                                    required>
                             </div>
                         </div>
 
@@ -611,8 +636,8 @@
                                 <div class="mb-3 row">
                                     <label for="city" class="col-sm-4 col-form-label">City</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="city" name="city" placeholder="Tirunelveli"
-                                            required>
+                                        <input type="text" class="form-control" id="city" name="city"
+                                            placeholder="Tirunelveli" required>
                                     </div>
                                 </div>
                             </div>
@@ -621,8 +646,8 @@
                                 <div class="mb-3 row">
                                     <label for="state" class="col-sm-2 col-form-label">State</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="state" name="state" placeholder="Tamil Nadu"
-                                            required>
+                                        <input type="text" class="form-control" id="state" name="state"
+                                            placeholder="Tamil Nadu" required>
                                     </div>
                                 </div>
                             </div>
@@ -634,8 +659,8 @@
                                 <div class="mb-3 row">
                                     <label for="country" class="col-sm-4 col-form-label">Country</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="country" name="country" placeholder="India"
-                                            required>
+                                        <input type="text" class="form-control" id="country" name="country"
+                                            placeholder="India" required>
                                     </div>
                                 </div>
                             </div>
@@ -645,8 +670,8 @@
                                     <label for="pincode" class="col-sm-2 col-form-label">Pincode</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control pincode-input" id="pincode"
-                                            placeholder="627417" maxlength="6" minlength="6" name="pincode" inputmode="numeric" pattern="[0-9]{6}"
-                                            required>
+                                            placeholder="627417" maxlength="6" minlength="6" name="pincode"
+                                            inputmode="numeric" pattern="[0-9]{6}" required>
                                     </div>
                                 </div>
                             </div>
