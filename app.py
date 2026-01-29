@@ -32,6 +32,8 @@ app.register_blueprint(notificationBp)
 
 @app.get("/")
 def home():
+    if not session.get("user"):
+        return redirect("/login")
     return render_template("index.html")
 
 @app.route("/login")

@@ -313,8 +313,7 @@ body {
 
 .welcome h2 {
     color: var(--brand-secondary);
-    font-weight: 700;
-    text-shadow: 1px 1px 1px var(--brand-muted), 2px 2px 3px var(--brand-secondary);
+    text-shadow: .5px .5px .5px var(--brand-muted), 1px 1px 2.5px var(--brand-secondary);
     padding: 10px;
 }
 
@@ -402,8 +401,6 @@ body {
 
 .myIssue h2,
 .localIssue h2 {
-    padding: 40px !important;
-    height: 56px !important;
     display: flex;
     align-items: center;
     position: sticky;
@@ -417,8 +414,7 @@ body {
 .localIssue h2,
 .bi-inbox-fill {
     color: var(--brand-secondary);
-    font-weight: 700;
-    text-shadow: 1px 1px 1px var(--brand-muted), 2px 2px 3px var(--brand-secondary);
+    text-shadow: .5px .5px .5px var(--brand-muted), 1px 1px 2.5px var(--brand-secondary);
     padding: 10px;
 }
 
@@ -924,11 +920,17 @@ body {
         flex: 1 1 100%;
         max-width: 100%;
     }
+    .imageGroup video {
+        flex: 1 1 100%;
+        
+        max-width: 100%;
+    }
 }
 
 
 @media (max-width: 375px) {
     .navbar-collapse>.d-flex {
+        justify-content: end;
         flex-wrap: wrap;
         row-gap: 10px;
     }

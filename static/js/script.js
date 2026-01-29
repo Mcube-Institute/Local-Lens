@@ -158,8 +158,12 @@ function getUserIssues() {
         .catch(err => alert(err.message))
 }
 
-$(document).ready(getIssues);
-$(document).ready(getUserIssues);
+$(document).ready(function () {
+    if ($("span.user").length) {   // user exists → logged in
+        getIssues();
+        getUserIssues();
+    }
+});
 
 async function getLocation(location) {
     try {
