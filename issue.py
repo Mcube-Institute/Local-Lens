@@ -170,16 +170,19 @@ def allIssues():
         isUser = request.args.get("isUser")
         
         currentUser = session.get("user")
-        userId = currentUser["id"]
-        
-        user=User.objects(id=userId).first()
-        if not user:
-            return jsonify({"status":"error","message":"User Not Found."}), 404
-        
-        if isUser:
-            issues=Issue.objects(user=user)
-        else:
-            issues=Issue.objects()
+
+
+        issues=Issue.objects()
+
+
+        if currentUser:
+            userId = currentUser["id"]
+            user=User.objects(id=userId).first()
+            if not user:
+                return jsonify({"status":"error","message":"User Not Found."}), 404
+            
+            if isUser:
+                issues=Issue.objects(user=user)
         
         issues = issues.order_by("-createdAt")
 
@@ -205,7 +208,7 @@ def allIssues():
 
             issueList.append(data)
 
-        return jsonify({"status":"success","message":"Issues Are Retrievd Successfully.","data":issueList}), 200           
+        return jsonify({"status":"success","message":"Issues Are Retrievd Successfully.","data":issueList, "isLogIn": True if currentUser else False}), 200           
     
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"}), 500

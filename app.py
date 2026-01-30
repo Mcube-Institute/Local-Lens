@@ -32,9 +32,18 @@ app.register_blueprint(notificationBp)
 
 @app.get("/")
 def home():
-    if not session.get("user"):
-        return redirect("/login")
+    # if not session.get("user"):
+    #     return redirect("/login")
     return render_template("index.html")
+
+@app.get("/admin")
+def admin():
+    return render_template("/admin/admin.html")
+
+@app.get("/super/<page>")
+def superAdmin(page):
+    return render_template(f"/superAdmin/{page}.html")
+
 
 @app.route("/login")
 def login():
@@ -63,6 +72,7 @@ def loadData():
         "id":str(user.id),
         "name":user.name,
         "email":user.email,
+        "role": user.role.name,
         "isLogIn":isLogIn
     }
 

@@ -56,6 +56,15 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
+                            {% if role.lower() == "admin" %}
+                            <li><a class="dropdown-item" class="logIn" href="/admin"><i class="bi bi-box-arrow-in-right pe-2"></i>Admin</a></li>
+                            {% endif %}
+                            {% if role.lower() == "super" %}
+                            <li><a class="dropdown-item" class="logIn" href="/super/role"><i class="bi bi-box-arrow-in-right pe-2"></i>Super Admin</a></li>
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
                             <li><a class="dropdown-item" class="logIn" href="/auth/logOut"><i class="bi bi-box-arrow-left pe-2"></i>logOut</a></li>
                             {% endif %}
 

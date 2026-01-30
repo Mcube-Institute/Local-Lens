@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <header class="llHeader">
+        <div class="llHeaderLeft">
+            <span class="llBrand">LocalLens</span>
+        </div>
+
+        <div class="llHeaderRight">
+
+            <!-- Profile Dropdown -->
+            <div class="dropstart">
+                <button class="btn btn-secondary" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-dark p-2">
+                    {% if isLogIn %}
+                    <li class="dropdownItem">
+                        <i class="bi bi-person-fill"></i>
+                        <span class="ps-2">{{ name }}</span>
+                    </li>
+                    <li class="dropdownItem">
+                        <i class="bi bi-envelope"></i>
+                        <span class="ps-2">{{ email }}</span>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="/auth/logOut">
+                            <i class="bi bi-box-arrow-left pe-2"></i>Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a class="dropdown-item" href="/login">
+                            <i class="bi bi-box-arrow-in-right pe-2"></i>Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </header>
+
+
+    <section class="hero">
+
+        <div class="container-fluid mt-4">
+
+            <div class="d-flex align-items-center gap-2 mb-3 p-3">
+
+                <div class="issueBadge d-flex align-items-center gap-2 px-3 py-2">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <span>Issue</span>
+                </div>
+
+            </div>
+
+            <div class="table-responsive nuemorphism p-3">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>S.No</th>
+                            <th>User</th>
+                            <th>Issue Name</th>
+                            <th>Issue Description</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Location</th>
+                            <th>History</th>
+                            <th>Attachments</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="adminIssueTable">
+                        <!-- Row -->
+                        <tr>
+                            <td class="sNo">1</td>
+
+                            <td>
+                                <div>
+                                    <strong class="name text-nowrap">Issue Owner</strong><br>
+                                    <small class="text-muted email text-nowrap">email@test.com</small>
+                                </div>
+                            </td>
+
+                            <td class="issueTittle">Road Damage</td>
+
+                            <td class="text-wrap issueDescription" style="max-width:240px;">
+                                Large pothole near bus stop causing traffic issues.
+                            </td>
+
+                            <td class="text-nowrap category" style="max-width:240px;">
+                                Road
+                            </td>
+
+                            <!-- STATUS DROPDOWN -->
+                            <td>
+                                <select class="form-select form-select-sm statusSelect">
+                                    <option value="REPORTED">Reported</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="RESOLVED">Resolved</option>
+                                    <option value="CLOSED">Closed</option>
+                                </select>
+                            </td>
+
+                            <td class="createdAt">12 Jan 2026</td>
+
+                            <td class="address">
+                                <span class="street">2-West Car Street,Pudukkudi</span>,
+                                <span class="city">Tirunelveli</span><br> ,
+                                <span class="state">India</span> -
+                                <span class="pincode">627417</span>
+                            </td>
+
+                            <!-- HISTORY -->
+                            <td class="text-center issueSatausHistory">
+                                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="offcanvas"
+                                    data-bs-target="#statusHistoryCanvas">
+                                    <i class="bi bi-clock-history"></i>
+                                </button>
+                            </td>
+
+                            <!-- ATTACHMENTS -->
+                            <td class="text-center Attachments">
+                                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="offcanvas"
+                                    data-bs-target="#attachmentsCanvas">
+                                    <i class="bi bi-paperclip"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+
+
+    <!-- off Canvas -->
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="statusHistoryCanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Issue Status History</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <ul class="list-group list-group-flush small">
+                <li class="list-group-item">
+                    <strong class="issueTittle text-muted">Road Damage Near School</strong><br>
+                    <strong class="PrevStatus">REPORTED</strong> <i class="bi bi-arrow-right"></i> <strong
+                        class="nextStatus">REPORTED</strong><br>
+                    <small class="text-muted createdAt pe-2 text-nowrap">12 Jan 2026 · <span
+                            class="category ps-2">Road</span></small>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="attachmentsCanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Attachments</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <div class="row g-2">
+
+                <!-- Image -->
+                <div class="col-6">
+                    <img src="/static/images/blue-smooth-wall-textured-background.jpg" class="img-fluid rounded"
+                        alt="attachment">
+                </div>
+
+                <!-- Video -->
+                <div class="col-12">
+                    <video controls class="w-100 rounded">
+                        <source src="/static/uploads/issues/3004fd2c-1e34-4251-b005-4e8757a237bc.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
+        integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
+
+        <script src="../static/js/admin.js"></script>
+</body>
+
+</html>

@@ -129,11 +129,15 @@ function getUserIssues() {
                 const issues = data.data;
                 const myIssue = $("#myIssueContainer");
                 myIssue.empty();
+                console.log("Hello", data.isLogIn)
+                if (data.isLogIn) {
+                    console.log("In")
+                    issues.forEach(issue => {
+                        myIssue.append(issueCard(issue));
+                    })
+                }
 
-
-                issues.forEach(issue => {
-                    myIssue.append(issueCard(issue));
-                })
+                console.log("out")
 
                 if (myIssue.children().length === 0) {
                     myIssue.html(`
@@ -146,8 +150,9 @@ function getUserIssues() {
                         </div>
                     `);
                 }
-
-                trackUpdate(issues);
+                if (data.isLogIn) {
+                    trackUpdate(issues);
+                }
                 $(".reveal").addClass("active")
             }
 
@@ -159,10 +164,8 @@ function getUserIssues() {
 }
 
 $(document).ready(function () {
-    if ($("span.user").length) {   // user exists → logged in
-        getIssues();
-        getUserIssues();
-    }
+    getIssues();
+    getUserIssues();
 });
 
 async function getLocation(location) {

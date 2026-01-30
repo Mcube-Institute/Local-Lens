@@ -1,0 +1,169 @@
+:root {
+    --bg--light: #ebeffcd8;
+
+    /* Brand */
+    --brand-primary: #0d9488;
+    /* Teal */
+    --brand-secondary: #0f172a;
+    /* Deep slate */
+    --brand-bg: #f8fafc;
+    --brand-muted: #3d4a5c;
+
+    /* Status */
+    --status-reported: #64748b;
+    --status-progress: #eab308;
+    /* Yellow */
+    --status-resolved: #16a34a;
+    /* Green */
+    --status-closed: #dc2626;
+
+    --surface-bg: #d8dfec;
+    /* Card / modal surface */
+    --surface-border: #c7d0e0;
+    --overlay-dark: rgba(15, 23, 42, 0.65);
+}
+
+table th,
+table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.issueBadge {
+    border: 2px solid var(--brand-secondary); /* brand orange */
+    border-radius: 10px;
+    color: var(--brand-secondary);
+    font-weight: 700;
+    font-size: 1rem;
+    background-color: var(--surface-border); /* light orange bg */
+}
+
+.issueBadge i {
+    font-size: 1.1rem;
+    color: var(--brand-secondary);
+}
+
+
+.llHeader {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    height: 64px;
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: var(--brand-secondary);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.llHeaderLeft {
+    display: flex;
+    align-items: center;
+}
+
+.llBrand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.llHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.llUserName {
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+/* Header buttons */
+.llHeader .btn {
+    padding: 6px 10px;
+}
+
+/* Dropdown tweaks */
+.dropdownItem {
+    font-size: 0.9rem;
+    color: #e5e7eb;
+}
+
+.dropdownItem i {
+    color: var(--brand-primary);
+}
+
+
+.statusSelect {
+    font-weight: 600;
+}
+
+.statusSelect option[value="REPORTED"] {
+    color: var(--status-reported);
+}
+
+.statusSelect option[value="IN_PROGRESS"] {
+    color: var(--status-progress);
+}
+
+.statusSelect option[value="RESOLVED"] {
+    color: var(--status-resolved);
+}
+
+.statusSelect option[value="CLOSED"] {
+    color: var(--status-closed);
+}
+
+.offcanvas-body .createdAt {
+    display: flex;
+    justify-content: end;
+}
+
+
+.llSidebar {
+    width: 240px;
+    min-height: 100vh;
+    background:var(--brand-bg);
+    border-right: 4px solid var(--brand-secondary);
+    padding: 20px;/* 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; */
+}
+
+.sidebarMenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebarMenu li {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--brand-secondary);
+    display: flex;
+    align-items: center;
+}
+
+.sidebarMenu li:hover,
+.sidebarMenu li.active {
+    background: var(--brand-muted);
+    color: var(--bg--light);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .llUserName {
+        display: none;
+    }
+}
