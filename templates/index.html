@@ -84,9 +84,14 @@
             <h2 class="reveal">Welcome To LocalLens</h2>
             <p class="reveal">Report, Track And Monitor Issues In Your Locality.</p>
             <div class="btnGroup reveal">
+                {% if isLogIn %}
                 <button type="button" class="btn btn-primary reportNew px-4  py-2 " data-bs-toggle="modal"
                     data-bs-target="#reportIssueModal"><i class="bi bi-plus-circle-dotted"></i> Report New
                     Issue</button>
+                {% endif %}
+                {% if not isLogIn %}
+                <a class="logIn btn btn-primary px-4  py-2"  href="/login"><i class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
+                {% endif %}
                 <a role="button"
                     class="btn btn-outline-secondary viewIssue px-4 py-2 d-flex align-items-center justify-content-center gap-1"
                     href="#myIssue"><i class="bi bi-view-stacked"></i>My Issues</a>
