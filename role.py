@@ -1,5 +1,6 @@
 from flask import Blueprint,request,jsonify
 from models import Role
+from datetime import datetime
 
 roleBp=Blueprint("roleBp",__name__)
 
@@ -46,7 +47,10 @@ def allRoles():
 
         for role in roles:
             data={
-                "name":role.name
+                "id":role.id,
+                "name":role.name,
+                "createdAt":role.createdAt,
+                "updatedAt":role.updatedAt
             }
 
             roleList.append(data)
@@ -70,7 +74,9 @@ def roleSpecific():
             return jsonify({"status":"error","message":"Role Not Found."}), 404 
         
         data={
-            "name":role.name
+            "name":role.name,
+            "createdAt":role.createdAt,
+            "updatedAt":role.updatedAt
             }
 
         return jsonify({"status":"success","message":"Role Retrieved Successfully.","data":data}), 200
@@ -108,6 +114,7 @@ def roleUpdate():
             return jsonify({"status":"error","message":"Role Not Found."}), 404 
 
         role.name=name
+        role.updatedAt = datetime.now()
 
         role.save()
 

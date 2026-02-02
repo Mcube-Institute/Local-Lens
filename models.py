@@ -12,7 +12,7 @@ class User(Document):
     id = StringField(primary_key=True, default=lambda: str(uuid4()))
     name = StringField(required=True)
     email = EmailField(required=True, unique=True)
-    password = StringField(required=True)
+    password = StringField()
     role = ReferenceField(Role, required=True, reverse_delete_rule=DENY,default=lambda: Role.objects(name="User").first())
     lastAssigned = BooleanField(default=False)
     createdAt = DateTimeField(default=datetime.now())

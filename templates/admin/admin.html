@@ -41,6 +41,12 @@
                         <hr class="dropdown-divider">
                     </li>
 
+                     <li>
+                    <a class="dropdown-item" href="/">
+                        <i class="bi bi-house-door pe-2"></i>Home
+                    </a>
+                </li>
+
                     <li>
                         <a class="dropdown-item" href="/auth/logOut">
                             <i class="bi bi-box-arrow-left pe-2"></i>Logout
@@ -221,6 +227,17 @@
 
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
         integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
+
+        <script>
+    window.APP_USER = {
+        id: "{{ id if isLogIn else '' }}",
+        name: "{{ name if isLogIn else '' }}",
+        email: "{{ email if isLogIn else '' }}",
+        role: "{{ role if isLogIn else '' }}",
+        isLogIn:" {{ 'true' if isLogIn else 'false' }}"
+    };
+</script>
+
 
         <script src="../static/js/admin.js"></script>
 </body>

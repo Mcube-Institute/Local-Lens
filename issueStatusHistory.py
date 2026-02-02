@@ -31,7 +31,8 @@ def issueSatatusHistoryAll():
                     "email": issue.user.email
                 },
                 "rejectedReason":issueStatus.rejectedReason,
-                "resolvedAt":issueStatus.resolvedAt
+                "resolvedAt":issueStatus.resolvedAt,
+                "createdAt":issueStatus.createdAt
             }
 
             issueStatusHistoryList.append(data)

@@ -129,7 +129,15 @@ function getUserIssues() {
                 const issues = data.data;
                 const myIssue = $("#myIssueContainer");
                 myIssue.empty();
-                console.log("Hello", data.isLogIn)
+                if(!data.isLogIn){
+                    myIssue.html(`
+                       <div class="emptyIssue reveal">
+                    <i class="bi bi-inbox-fill reveal"></i>
+                    <p class="reveal">No Issues Reported Yet.</p>
+                    <a class="logIn btn btn-primary px-4  py-2"  href="/login"><i class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
+                    `);
+                }
+
                 if (data.isLogIn) {
                     console.log("In")
                     issues.forEach(issue => {

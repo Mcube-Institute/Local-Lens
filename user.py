@@ -17,15 +17,15 @@ def newUser():
         name=user.get("name")
         email=user.get("email")
         password=user.get("password")
-        roleId=user.get("roleId")
+        roleName = user.get("role")
 
-        if not name or not email or not password or not roleId:
+        if not name or not email or not password or not roleName:
             return jsonify({"status":"error","message":"Missing Fields"}), 400
     
         if User.objects(email=email).first():
             return jsonify({"status":"error","message":"This Email Address Is Already Registered."}), 409 
     
-        role=Role.objects(id=roleId).first()
+        role=Role.objects(name=roleName).first()
 
         if not role:
             return jsonify({"status":"error","message":"Role Not Found."}), 404 
@@ -54,6 +54,7 @@ def allUsers():
 
         for user in users:
             data={
+                "id": str(user.id), 
                 "name":user.name,
                 "email":user.email,
                 "password":user.password,
@@ -113,9 +114,9 @@ def userUpdate():
         name=userData.get("name")
         email=userData.get("email")
         password=userData.get("password")
-        roleId=userData.get("roleId")
+        roleName = userData.get("role")
 
-        if not name or not email or not roleId:
+        if not name or not email or not roleName:
             return jsonify({
                 "status": "error",
                 "message": "Name, email and role are required."
@@ -127,7 +128,7 @@ def userUpdate():
                 "message": "Email already in use."
             }), 409
 
-        role=Role.objects(id=roleId).first()
+        role=Role.objects(name=roleName).first()
 
         if not role:
             return jsonify({"status":"error","message":"Role Not Found."}), 404
