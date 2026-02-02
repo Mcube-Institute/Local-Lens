@@ -24,7 +24,7 @@ function getDateTime(dateTime) {
     const d = new Date(dateTime);
 
     const day = d.getDate();
-    const month = d.toLocaleString("en-IN", { month: "short" }); // Jan, Feb, Mar
+    const month = d.toLocaleString("en-IN", { month: "short",timeZone: "Asia/Kolkata" }); // Jan, Feb, Mar
     const year = d.getFullYear();
 
     return `${day} ${month} ${year}`;
@@ -287,6 +287,7 @@ function createIssue(data) {
             if (data.status == "success") {
                 $("#reportIssueModal").modal("hide");
                 getIssues();
+                getUserIssues();
                 refreshNotificationDot();
                 alert(data.message)
             }
