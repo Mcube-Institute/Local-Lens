@@ -49,8 +49,8 @@ def allRoles():
             data={
                 "id":role.id,
                 "name":role.name,
-                "createdAt":role.createdAt,
-                "updatedAt":role.updatedAt
+                "createdAt":role.createdAt.strftime("%d-%m-%Y | %H:%M:%S"),
+                "updatedAt":role.updatedAt.strftime("%d-%m-%Y | %H:%M:%S") if role.updatedAt else None
             }
 
             roleList.append(data)
@@ -75,8 +75,8 @@ def roleSpecific():
         
         data={
             "name":role.name,
-            "createdAt":role.createdAt,
-            "updatedAt":role.updatedAt
+            "createdAt":role.createdAt.strftime("%d-%m-%Y | %H:%M:%S"),
+            "updatedAt":role.updatedAt.strftime("%d-%m-%Y | %H:%M:%S") if role.updatedAt else None
             }
 
         return jsonify({"status":"success","message":"Role Retrieved Successfully.","data":data}), 200

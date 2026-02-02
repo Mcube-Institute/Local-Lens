@@ -11,14 +11,16 @@ async function fetchJSON(url, options = {}) {
 function formatDate(dt) {
     if (!dt) return "N/A";
     const d = new Date(dt);
-    return d.toLocaleDateString("en-Us", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour:"2-digit",
-        minute:"2-digit",
-        timeZone: "Asia/Kolkata"
-    });
+    // return d.toLocaleDateString("en-Us", {
+    //     day: "2-digit",
+    //     month: "short",
+    //     year: "numeric",
+    //     hour:"2-digit",
+    //     minute:"2-digit",
+    //     timeZone: "Asia/Kolkata"
+    // });
+
+    return d
 }
 
 async function loadRoles() {
@@ -34,8 +36,8 @@ async function loadRoles() {
                 <tr data-id="${role.id || ''}">
                     <td class="sNo">${sNo++}</td>
                     <td class="role">${role.name}</td>
-                    <td class="createdAt">${formatDate(role.createdAt)}</td>
-                    <td class="updatedAt">${formatDate(role.updatedAt)}</td>
+                    <td class="createdAt">${(role.createdAt)}</td>
+                    <td class="updatedAt">${(role.updatedAt)}</td>
                     <td class="text-center">
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">

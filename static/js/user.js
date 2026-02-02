@@ -49,6 +49,11 @@ async function loadUsers() {
                                 <i class="bi bi-three-dots-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
+                            <li>
+                                        <button class="dropdown-item editUserBtn" data-bs-toggle="modal" data-bs-target="#updateUserModal">
+                                            <i class="bi bi-pencil me-2"></i>Edit
+                                        </button>
+                                    </li>
                                 <li>
                                     <button class="dropdown-item deleteUserBtn text-danger">
                                         <i class="bi bi-trash me-2"></i>Delete
@@ -81,6 +86,8 @@ $(document).on("change", ".roleSelect", async function () {
 
     const userId = row.data("id");
     const role = select.val();
+    const res = await fetchJSON(`/user/getSpecific?id=${userId}`);
+    const user = res.data
 
     try {
         await fetchJSON(`/user/update?id=${userId}`, {
@@ -89,7 +96,8 @@ $(document).on("change", ".roleSelect", async function () {
             body: JSON.stringify({
                 name: row.find(".name").text(),
                 email: row.find(".email").text(),
-                role: role
+                role: role,
+                password: `${user.password}`
             })
         });
 
@@ -97,7 +105,7 @@ $(document).on("change", ".roleSelect", async function () {
 
     } catch (err) {
         alert(err.message);
-        loadUsers(); 
+        loadUsers();
     }
 });
 
@@ -129,6 +137,58 @@ $("#createUserBtn").on("click", async function () {
         alert(err.message);
     }
 });
+
+let updateRole= null;
+
+$(document).on("click", ".editUserBtn", async function () {
+    const row = $(this).closest("tr");
+    const userId = row.data("id");
+
+    try {
+        const res = await fetchJSON(`/user/getSpecific?id=${userId}`);
+        const user = res.data;
+
+        $("#updateUserId").val(userId);
+        $("#updateName").val(user.name);
+        $("#updateEmail").val(user.email);
+        $("#updatePassword").val(user.password);
+        updateRole=user.role;
+
+        $("#updateUserModal").modal("show");
+
+    } catch (err) {
+        alert(err.message);
+    }
+});
+
+$("#updateUserBtn").on("click", async function () {
+    const userId = $("#updateUserId").val();
+    const name = $("#updateName").val().trim();
+    const email = $("#updateEmail").val().trim();
+    const password = $("#updatePassword").val();
+    role=updateRole
+
+    if (!name || !email || !password || !role) {
+        alert("All fields required");
+        return;
+    }
+
+    try {
+        await fetchJSON(`/user/update?id=${userId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password,role })
+        });
+
+        $("#updateUserModal").modal("hide");
+        alert("User updated successfully");
+        loadUsers();
+
+    } catch (err) {
+        alert(err.message);
+    }
+});
+
 
 $(document).on("click", ".deleteUserBtn", async function () {
     const row = $(this).closest("tr");
