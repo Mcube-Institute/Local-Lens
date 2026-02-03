@@ -25,7 +25,7 @@
             <!-- Collapsible content -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <div class="d-flex gap-4 text-white align-items-center fw-semibold ms-auto flex-wrap-sm">
-                    
+
                     {% if isLogIn %}
                     <p class="mb-0">Hi, <span class="user">{{name}} </span></p>
                     {% endif %}
@@ -48,32 +48,37 @@
                     {% endif %}
 
                     <div class="dropstart">
-                        <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
                             {% if isLogIn %}
-                            <li class="dropdown-item"><i class="bi bi-person-fill"></i><span class="user ps-2">{{name}}</span></li>
-                            <li class="dropdown-item"><i class="bi bi-envelope"></i><span class="email ps-2">{{email}}</span></li>
+                            <li class="dropdown-item"><i class="bi bi-person-fill"></i><span
+                                    class="user ps-2">{{name}}</span></li>
+                            <li class="dropdown-item"><i class="bi bi-envelope"></i><span
+                                    class="email ps-2">{{email}}</span></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             {% if role.lower() == "admin" %}
-                            <li><a class="dropdown-item" class="logIn" href="/admin"><i class="bi bi-box-arrow-in-right pe-2"></i>Admin</a></li>
+                            <li><a class="dropdown-item" class="logIn" href="/admin"><i
+                                        class="bi bi-box-arrow-in-right pe-2"></i>Admin</a></li>
                             {% endif %}
                             {% if role.lower() == "super" %}
-                            <li><a class="dropdown-item" class="logIn" href="/super/role"><i class="bi bi-box-arrow-in-right pe-2"></i>Super Admin</a></li>
+                            <li><a class="dropdown-item" class="logIn" href="/super/role"><i
+                                        class="bi bi-box-arrow-in-right pe-2"></i>Super Admin</a></li>
                             {% endif %}
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" class="logIn" href="/auth/logOut"><i class="bi bi-box-arrow-left pe-2"></i>logOut</a></li>
+                            <li><a class="dropdown-item" class="logIn" href="/auth/logOut"><i
+                                        class="bi bi-box-arrow-left pe-2"></i>logOut</a></li>
                             {% endif %}
 
                             {% if not isLogIn %}
-                            <li><a class="dropdown-item" class="logIn"  href="/login"><i class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
-                             {% endif %}
+                            <li><a class="dropdown-item" class="logIn" href="/login"><i
+                                        class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -93,7 +98,8 @@
                     Issue</button>
                 {% endif %}
                 {% if not isLogIn %}
-                <a class="logIn btn btn-primary px-4  py-2"  href="/login"><i class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
+                <a class="logIn btn btn-primary px-4  py-2" href="/login"><i
+                        class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
                 {% endif %}
                 <a role="button"
                     class="btn btn-outline-secondary viewIssue px-4 py-2 d-flex align-items-center justify-content-center gap-1"
@@ -105,6 +111,14 @@
         </section>
 
         <section class="track py-5">
+            <div class="btn-group mb-3 reveal  d-flex flex-wrap" id="trackFilter">
+                <button class="btn btn-outline-secondary active" data-filter="all">All</button>
+                <button class="btn btn-outline-secondary" data-filter="24h">24 Hours</button>
+                <button class="btn btn-outline-secondary" data-filter="7d">7 Days</button>
+                <button class="btn btn-outline-secondary" data-filter="1m">1 Month</button>
+                <button class="btn btn-outline-secondary" data-filter="1y">1 Year</button>
+            </div>
+
             <div class="row g-4">
                 <div class="col-12 col-sm-6 col-lg-3 reveal">
                     <div class="total nuemorphism h-100 ">
@@ -387,7 +401,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-between flex-nowrap">
+                    <div class="fw-bold">Issu Has Benn Assigned To - <span class="assignedTo"><span
+                                class="px-2 assignedToName text-nowrap">name</span>|<span
+                                class="px-2 assignedToEmail text-nowrap">email@test.com</span></span></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>

@@ -69,57 +69,92 @@ function issueCard(issue) {
     `;
 }
 
-function trackUpdate(issues) {
+function trackUpdate(issues, filter = "all") {
+    let total = 0;
     let inProgress = 0;
     let resolved = 0;
     let closed = 0;
 
-    issues.forEach(issue => {
-        if (issue.status == "IN_PROGRESS") inProgress++;
-        if (issue.status == "RESOLVED") resolved++;
-        if (issue.status == "CLOSED") closed++;
-    })
+    const now = new Date();
 
-    $(".totalCount").text(issues.length);
-    $(".inprogressCount").text(inProgress)
-    $(".closedCount").text(closed)
-    $(".resolvedCount").text(resolved)
+    issues.forEach(issue => {
+        const createdAt = new Date(issue.createdAt);
+        let include = true;
+
+        switch (filter) {
+            case "24h":
+                include = createdAt >= new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                break;
+
+            case "7d":
+                include = createdAt >= new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                break;
+
+            case "1m":
+                include = createdAt >= new Date(
+                    now.getFullYear(),
+                    now.getMonth() - 1,
+                    now.getDate()
+                );
+                break;
+
+            case "1y":
+                include = createdAt >= new Date(
+                    now.getFullYear() - 1,
+                    now.getMonth(),
+                    now.getDate()
+                );
+                break;
+
+            case "all":
+            default:
+                include = true;
+        }
+
+        if (!include) return;
+
+        total++;
+
+        if (issue.status === "IN_PROGRESS") inProgress++;
+        if (issue.status === "RESOLVED") resolved++;
+        if (issue.status === "CLOSED") closed++;
+    });
+
+    $(".totalCount").text(total);
+    $(".inprogressCount").text(inProgress);
+    $(".resolvedCount").text(resolved);
+    $(".closedCount").text(closed);
 }
 
 function getIssues() {
     fetch("/issue/getAll")
         .then(res => res.json())
         .then(data => {
-            if (data.status == "success") {
-                const issues = data.data;
-                const localIssue = $("#localIssueContainer")
+            if (data.status === "success") {
+                allIssues = data.data;
 
+                const localIssue = $("#localIssueContainer");
                 localIssue.empty();
 
-
-                issues.forEach(issue => {
+                allIssues.forEach(issue => {
                     localIssue.append(issueCard(issue));
-                })
+                });
 
-                if (localIssue.children().length === 0) {
-                    localIssue.html(`
-                        <div class="emptyIssue reveal">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            <p>No Issues Found In Your Locality.</p>
-                        </div>
-                    `);
-                }
-
-                trackUpdate(issues);
-                $(".reveal").addClass("active")
-            }
-
-            else {
-                throw new Error(data.message);
+                trackUpdate(allIssues, "all");
+                $(".reveal").addClass("active");
             }
         })
-        .catch(err => alert(err.message))
+        .catch(err => alert(err.message));
 }
+
+$(document).on("click", "#trackFilter button", function () {
+    $("#trackFilter button").removeClass("active");
+    $(this).addClass("active");
+
+    const filter = $(this).data("filter");
+    trackUpdate(allIssues, filter);
+});
+
 
 function getUserIssues() {
     fetch("/issue/getAll?isUser=true")
@@ -207,6 +242,7 @@ $(document).on("click", ".view", async function () {
     try {
         const res = await fetch(`/issue/getSpecific?id=${issueId}`);
         const data = await res.json();
+        
 
         if (data.status !== "success") {
             throw new Error(data.message);
@@ -221,10 +257,22 @@ $(document).on("click", ".view", async function () {
             .addClass(stColorMap[issue.status])
             .text(issue.status.replace("_", " "));
 
+        const assignedTo=issue.assignedTo;
+
+        const result=await fetch(`/user/getSpecific?id=${assignedTo}`)
+        const userJson=await result.json();
+
+        if (userJson.status !== "success") {
+            throw new Error(data.message);
+        }
+        user=userJson.data;
+
         modal.find(".reportedOn").text(getDateTime(issue.createdAt));
         modal.find(".issueTittle").text(issue.issueTittle);
         modal.find(".issueDescription").text(issue.issueDescription);
         modal.find(".issueCategory").text(issue.category);
+        modal.find(".assignedToName").text(user.name);
+        modal.find(".assignedToEmail").text(user.email);
 
         const issueLocation = await getLocation(issue.location);
 
@@ -506,31 +554,4 @@ $("#notificationModal").on("shown.bs.offcanvas", async function () {
 
 $(document).ready(() => {
     refreshNotificationDot();
-});
-
-
-/*  LOGOUT  */
-function logOut() {
-    fetch("/auth/logOut")
-        .then(response => response.json())
-        .then(data => {
-            if (data.status == "success") {
-                $(".logOut").addClass("visually-hidden");
-                $(".logIn").removeClass("visually-hidden");
-                window.location.replace("/");
-                alert(data.message)
-            }
-            else {
-                throw new Error(data.message);
-            }
-        })
-        .catch(err => {
-            alert(err)
-        })
-}
-
-$(".logOut").click(function (e) {
-    e.preventDefault();
-
-    logOut()
 });

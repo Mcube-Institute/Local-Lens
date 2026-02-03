@@ -146,7 +146,12 @@ h6 {
     border-color: #1d4ed8 !important;
 }
 
-
+.assignedTo{
+    background-color: var(--status-reported);
+    color: var(--bg--light);
+    font-weight: 600;
+    padding:3px ;
+}
 
 
 body {
@@ -333,6 +338,8 @@ body {
 }
 
 
+
+
 .track h5 {
     color: var(--brand-muted);
     font-weight: 600;
@@ -354,7 +361,7 @@ body {
 .inprogress,
 .resolved,
 .closed {
-    background-color: var(--bg--light);
+    background-color: var(--brand-bg);
 }
 
 .totalCount {
