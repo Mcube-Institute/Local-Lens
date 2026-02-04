@@ -92,6 +92,32 @@ def userSpecific():
     
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"}), 500
+
+
+@userBp.get("/user/getSpecificByEmail")
+def userSpecificByE():
+    try:
+        email = request.args.get("email")
+
+        if not email:
+            return jsonify({"status": "error", "message": "Email is required."}), 400
+        
+        user=User.objects(email=email).first()
+
+        if not user:
+            return jsonify({"status":"error","message":"User Not Found."}), 404
+        
+        data={
+            "name":user.name,
+            "email":user.email,
+            "password":user.password,
+            "role":user.role.name
+        }
+        
+        return jsonify({"status":"success","message":"User Retrieved.","data":data}), 200 
+    
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"Error {str(e)}"}), 500
     
 @userBp.post("/user/update")
 def userUpdate():

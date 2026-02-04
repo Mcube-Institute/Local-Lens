@@ -60,6 +60,9 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
+                            <button class="dropdown-item editUserBtn">
+                                <i class="bi bi-pencil me-2"></i>Update
+                            </button>
                             {% if role.lower() == "admin" %}
                             <li><a class="dropdown-item" class="logIn" href="/admin"><i
                                         class="bi bi-box-arrow-in-right pe-2"></i>Admin</a></li>
@@ -411,6 +414,45 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="updateUserModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Update User</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="updateUserId">
+
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="updateName">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="updateEmail">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input type="password" class="form-control" id="updatePassword">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-warning fw-bold" id="updateUserBtn">Update</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <!-- Off Canvas -->
     <div class="offcanvas offcanvas-end text-primary-emphasis bg-primary-subtle" data-bs-backdrop="static" tabindex="-1"
         id="notificationModal" aria-labelledby="staticBackdropLabel">
@@ -674,7 +716,19 @@
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
         integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
 
+    <script>
+        window.APP_USER = {
+            id: "{{ id if isLogIn else '' }}",
+            name: "{{ name if isLogIn else '' }}",
+            email: "{{ email if isLogIn else '' }}",
+            role: "{{ role if isLogIn else '' }}",
+            isLogIn: " {{ 'true' if isLogIn else 'false' }}",
+            password:"{{ password if isLogin else ''}}"
+        };
+    </script>
+
     <script src="../static/js/script.js"></script>
+
 </body>
 
 </html>

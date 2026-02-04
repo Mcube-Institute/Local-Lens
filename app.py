@@ -72,10 +72,10 @@ def loadData():
         "id":str(user.id),
         "name":user.name,
         "email":user.email,
+        "password":user.password,
         "role": user.role.name,
         "isLogIn":isLogIn
     }
-
     return userData
 
 if __name__=="__main__":

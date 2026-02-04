@@ -555,3 +555,63 @@ $("#notificationModal").on("shown.bs.offcanvas", async function () {
 $(document).ready(() => {
     refreshNotificationDot();
 });
+
+/* update User Details */
+
+const CURRENT_USER = window.APP_USER;
+
+if (!CURRENT_USER || !CURRENT_USER.isLogIn) {
+    alert("Session expired. Please login again.");
+    window.location.href = "/login";
+}
+
+const currentUserId = CURRENT_USER.id;
+const currentName=CURRENT_USER.name;
+const currentEmail=CURRENT_USER.email;
+const currentPassword=CURRENT_USER.password;
+const currentRole=CURRENT_USER.role;
+
+async function fetchJSON(url, options = {}) {
+    const res = await fetch(url, options);
+    const data = await res.json();
+
+    if (data.status !== "success") {
+        throw new Error(data.message);
+    }
+    return data;
+}
+
+$(document).on("click", ".editUserBtn", async function () {
+        $("#updateUserId").val(currentUserId);
+        $("#updateName").val(currentName);
+        $("#updateEmail").val(currentEmail);
+        $("#updatePassword").val(currentPassword);
+
+        $("#updateUserModal").modal("show");
+});
+
+$("#updateUserBtn").on("click", async function () {
+    const userId = $("#updateUserId").val();
+    const name = $("#updateName").val().trim();
+    const email = $("#updateEmail").val().trim();
+    const password = $("#updatePassword").val();
+    role=currentRole
+
+    if (!name || !email || !password || !role) {
+        alert("All fields required");
+        return;
+    }
+
+    try {
+        await fetchJSON(`/user/update?id=${userId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password,role })
+        });
+
+        $("#updateUserModal").modal("hide");
+        alert("User updated successfully");
+    } catch (err) {
+        alert(err.message);
+    }
+});
