@@ -15,6 +15,8 @@ class User(Document):
     password = StringField(required=True)
     role = ReferenceField(Role, required=True, reverse_delete_rule=DENY,default=lambda: Role.objects(name="User").first())
     lastAssigned = BooleanField(default=False)
+    otp=StringField()
+    otpExpiry=DateTimeField()
     createdAt = DateTimeField(default=datetime.now())
     updatedAt = DateTimeField()
 

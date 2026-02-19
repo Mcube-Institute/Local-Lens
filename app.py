@@ -1,4 +1,6 @@
 from flask import Flask,request,render_template,jsonify,session,redirect
+import os
+from flask_mail import Mail
 from mongoengine import connect,connection
 from models import *
 from auth import authBp
@@ -77,6 +79,16 @@ def loadData():
         "isLogIn":isLogIn
     }
     return userData
+
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'thalathanush8@gmail.com'
+app.config['MAIL_PASSWORD'] =   os.getenv('MAIL_PASSWORD')
+
+mail = Mail(app)
+
 
 if __name__=="__main__":
     app.run(debug=True)
