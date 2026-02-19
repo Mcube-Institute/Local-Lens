@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         },
         {
-            threshold: 0.05   // 👈 instead of 0.15
+            threshold: 0.05   
         }
     );
 
@@ -373,26 +373,12 @@ $(".issueCreation").on("submit", function (e) {
 
             data.append("locationId", locRes.data.id)
 
-            // const issueData = {
-            //     issueTittle: data.issueTittle,
-            //     issueDescription: data.issueDescription,
-            //     category: data.category,
-            //     tags: data.tags,
-            //     locationId: locRes.data.id
-            // };
-
             const files = document.getElementById("attachments").files;
 
             if (files.length === 0) {
                 alert("Please select files");
                 return;
             }
-
-            /* if (files.length > 1) {
-                for (let file of files) {
-                    data.append("attachments", file);
-                }
-            } */
 
             console.log(data)
             createIssue(data)

@@ -15,7 +15,7 @@
     <!-- nav bar -->
     <nav class="navbar navbar-dark bg-dark navbar-expand-md p-3">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bolder">LocalLens</a>
+            <a class="navbar-brand fw-bolder" href="#">LocalLens</a>
 
             <!-- Collapse toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -31,14 +31,19 @@
                     {% endif %}
 
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop">
+                        data-bs-target="#staticBackdrop" title="Info">
                         <i class="bi bi-info-lg"></i>
                     </button>
 
+                    {% if not isLogIn %}
+                    <a class="logIn btn btn-primary navLogin  py-1" href="/login" title="LogIn"><i
+                            class="bi bi-box-arrow-in-right"></i></a>
+                    {% endif %}
+
                     {% if isLogIn %}
 
-                    <button class="btn btn-secondary position-relative" data-bs-toggle="offcanvas"
-                        data-bs-target="#notificationModal">
+                    <button class="btn btn-secondary position-relative notificationBtn" data-bs-toggle="offcanvas"
+                        data-bs-target="#notificationModal" title="Notifications">
                         <i class="bi bi-bell"></i>
                         <span id="notificationDot"
                             class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle"
@@ -47,8 +52,10 @@
 
                     {% endif %}
 
+                    {% if isLogIn %}
                     <div class="dropstart">
-                        <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary profileBtn" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false" title="Profile">
                             <i class="bi bi-person-circle"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
@@ -78,12 +85,13 @@
                                         class="bi bi-box-arrow-left pe-2"></i>logOut</a></li>
                             {% endif %}
 
-                            {% if not isLogIn %}
+                            <!-- {% if not isLogIn %}
                             <li><a class="dropdown-item" class="logIn" href="/login"><i
                                         class="bi bi-box-arrow-in-right pe-2"></i>logIn</a></li>
-                            {% endif %}
+                            {% endif %} -->
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -723,7 +731,7 @@
             email: "{{ email if isLogIn else '' }}",
             role: "{{ role if isLogIn else '' }}",
             isLogIn: " {{ 'true' if isLogIn else 'false' }}",
-            password:"{{ password if isLogin else ''}}"
+            password: "{{ password if isLogin else ''}}"
         };
     </script>
 

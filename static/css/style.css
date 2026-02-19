@@ -161,6 +161,29 @@ body {
     color: var(--brand-secondary);
 }
 
+.btn-warning{
+    border: 1.5px solid #d8dfec !important;
+}
+
+.notificationBtn{
+    border: 1px solid #d8dfec !important;
+}
+
+#notificationDot{
+    border: 1px solid #d8dfec !important;
+}
+
+.navLogin{
+    border: 1px solid #c7d0e0 !important;
+    border-radius: 5px !important;
+    color: #000 !important;
+    font-size: large !important;
+}
+
+.profileBtn{
+    border: 1px solid #d8dfec !important;
+}
+
 .hero {
     padding-top: 90px;
     /* navbar height */

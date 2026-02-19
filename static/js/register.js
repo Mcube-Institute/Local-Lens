@@ -10,7 +10,6 @@ function register(data) {
         .then(data => {
             if (data.status == "success") {
                 window.location.replace("/");
-                alert(data.message)
             }
             else {
                 throw new Error(data.message);

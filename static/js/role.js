@@ -8,20 +8,20 @@ async function fetchJSON(url, options = {}) {
     return data;
 }
 
-function formatDate(dt) {
-    if (!dt) return "N/A";
-    const d = new Date(dt);
-    // return d.toLocaleDateString("en-Us", {
-    //     day: "2-digit",
-    //     month: "short",
-    //     year: "numeric",
-    //     hour:"2-digit",
-    //     minute:"2-digit",
-    //     timeZone: "Asia/Kolkata"
-    // });
+// function formatDate(dt) {
+//     if (!dt) return "N/A";
+//     const d = new Date(dt);
+//     return d.toLocaleDateString("en-Us", {
+//         day: "2-digit",
+//         month: "short",
+//         year: "numeric",
+//         hour:"2-digit",
+//         minute:"2-digit",
+//         timeZone: "Asia/Kolkata"
+//     });
 
-    return d
-}
+//     return d
+// }
 
 async function loadRoles() {
     try {

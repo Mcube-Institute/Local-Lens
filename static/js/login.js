@@ -10,7 +10,6 @@ function logIn(data) {
         .then(response => response.json())
         .then(data => {
             if (data.status == "success") {
-                alert(data.message)
                 $(".logOut").removeClass("visually-hidden");
                 $(".logIn").addClass("visually-hidden");
                 window.location.replace("/");
