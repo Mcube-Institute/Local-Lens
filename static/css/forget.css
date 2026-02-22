@@ -1,0 +1,111 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --bg--light: #ebeffcd8;
+
+    /* Brand */
+    --brand-primary: #0d9488;
+    /* Teal */
+    --brand-secondary: #0f172a;
+    /* Deep slate */
+    --brand-bg: #f8fafc;
+    --brand-muted: #3d4a5c;
+
+    /* Status */
+    --status-reported: #64748b;
+    --status-progress: #eab308;
+    /* Yellow */
+    --status-resolved: #16a34a;
+    /* Green */
+    --status-closed: #dc2626;
+
+    --surface-bg: #d8dfec;
+    /* Card / modal surface */
+    --surface-border: #c7d0e0;
+    --overlay-dark: rgba(15, 23, 42, 0.65);
+}
+
+.hero{
+    min-height: 100vh;
+    background: url("../images/blue-smooth-wall-textured-background.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formwrap {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(2.5px);
+    -webkit-backdrop-filter: blur(2.5px);
+
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+.authTitle {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--bg--light);
+}
+
+.authSubtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--bg--light);
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    color: var(--brand-secondary) !important;
+}
+
+.otpWrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+    max-width: 420px;
+}
+
+
+.form-control {
+    background-color: #eef2ff !important;
+    border: 1px solid var(--surface-border) !important;
+}
+
+.form-control:focus {
+    background-color: #fff !important;
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(13, 148, 136, 0.25) !important;
+}
+
+.authFooter {
+    color: var(--surface-bg);
+    margin-top: 16px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.authFooter a {
+    color: var(--brand-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.authFooter a:hover {
+    text-decoration: underline;
+}

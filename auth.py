@@ -77,7 +77,7 @@ def login():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"}),500
 
-@authBp.post("/auth/forgetPassword")
+@authBp.post("/auth/genOtp")
 def forgetPassword():
     try:
         data = request.get_json()
@@ -93,7 +93,7 @@ def forgetPassword():
         user=User.objects(email=email).first()
 
         if not user:
-            return jsonify({"status":"error","message":"User Not Found."}), 404
+            return jsonify({"status":"error","message":"User Not Found,Kindly Check Email Address."}), 404
 
         otp=genOtp()            
         user.otp=otp
@@ -135,10 +135,6 @@ def verifyOtp():
 
         if datetime.now() > user.otpExpiry:
             return jsonify({"message": "OTP expired"}), 400
-
-        user.otp=None
-        user.otpExpiry=None
-        user.save()
 
         return jsonify({"status":"success","message":"OTP Verified Successfully."}),200
     except Exception as e:

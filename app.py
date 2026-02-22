@@ -55,6 +55,10 @@ def login():
 def register():
     return render_template("register.html")    
 
+@app.route("/resetPassword")
+def resetPassword():
+    return render_template("forgetPassword.html")    
+
 @app.context_processor
 def loadData():
     isLogIn=True

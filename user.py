@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify
+from flask import Blueprint,request,jsonify,redirect
 from  models import User,Role,Issue
 from issue import getNextAdmin
 from notifications import newNotification
@@ -145,7 +145,7 @@ def userUpdate():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Error {str(e)}"}), 500
 
-@userBp.post("/user/resetPassowrd")
+@userBp.post("/user/resetPassword")
 def resetPassword():
     try:
         data=request.get_json()
@@ -169,6 +169,8 @@ def resetPassword():
         user.name=user.name
         user.email=email
         user.role=user.role
+        user.otp=None
+        user.otpExpiry=None
         user.save()
 
         return jsonify({"status":"success","message":"Password Changed Successfully."}), 200
