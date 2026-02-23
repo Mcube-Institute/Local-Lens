@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         },
         {
-            threshold: 0.05   
+            threshold: 0.05
         }
     );
 
@@ -24,7 +24,7 @@ function getDateTime(dateTime) {
     const d = new Date(dateTime);
 
     const day = d.getDate();
-    const month = d.toLocaleString("en-IN", { month: "short",timeZone: "Asia/Kolkata" }); // Jan, Feb, Mar
+    const month = d.toLocaleString("en-IN", { month: "short", timeZone: "Asia/Kolkata" }); // Jan, Feb, Mar
     const year = d.getFullYear();
 
     return `${day} ${month} ${year}`;
@@ -144,7 +144,10 @@ function getIssues() {
                 $(".reveal").addClass("active");
             }
         })
-        .catch(err => alert(err.message));
+        .catch(err => Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast());
 }
 
 $(document).on("click", "#trackFilter button", function () {
@@ -164,7 +167,7 @@ function getUserIssues() {
                 const issues = data.data;
                 const myIssue = $("#myIssueContainer");
                 myIssue.empty();
-                if(!data.isLogIn){
+                if (!data.isLogIn) {
                     myIssue.html(`
                        <div class="emptyIssue reveal">
                     <i class="bi bi-inbox-fill reveal"></i>
@@ -179,8 +182,6 @@ function getUserIssues() {
                         myIssue.append(issueCard(issue));
                     })
                 }
-
-                console.log("out")
 
                 if (myIssue.children().length === 0) {
                     myIssue.html(`
@@ -203,7 +204,10 @@ function getUserIssues() {
                 throw new Error(data.message);
             }
         })
-        .catch(err => alert(err.message))
+        .catch(err => Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast())
 }
 
 $(document).ready(function () {
@@ -222,7 +226,10 @@ async function getLocation(location) {
             throw new Error(data.message);
         }
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
         return null;
     }
 }
@@ -242,7 +249,7 @@ $(document).on("click", ".view", async function () {
     try {
         const res = await fetch(`/issue/getSpecific?id=${issueId}`);
         const data = await res.json();
-        
+
 
         if (data.status !== "success") {
             throw new Error(data.message);
@@ -257,15 +264,15 @@ $(document).on("click", ".view", async function () {
             .addClass(stColorMap[issue.status])
             .text(issue.status.replace("_", " "));
 
-        const assignedTo=issue.assignedTo;
+        const assignedTo = issue.assignedTo;
 
-        const result=await fetch(`/user/getSpecific?id=${assignedTo}`)
-        const userJson=await result.json();
+        const result = await fetch(`/user/getSpecific?id=${assignedTo}`)
+        const userJson = await result.json();
 
         if (userJson.status !== "success") {
             throw new Error(data.message);
         }
-        user=userJson.data;
+        user = userJson.data;
 
         modal.find(".reportedOn").text(getDateTime(issue.createdAt));
         modal.find(".issueTittle").text(issue.issueTittle);
@@ -310,7 +317,10 @@ $(document).on("click", ".view", async function () {
         });
 
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
     }
 });
 
@@ -337,14 +347,20 @@ function createIssue(data) {
                 getIssues();
                 getUserIssues();
                 refreshNotificationDot();
-                alert(data.message)
+                Toastify({
+                    text: data.message,
+                    duration: 3000
+                }).showToast();
             }
             else {
                 throw new Error(data.message);
             }
         })
         .catch(err => {
-            alert(err)
+            Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
         })
 }
 
@@ -363,8 +379,6 @@ $(".issueCreation").on("submit", function (e) {
         pincode: data.get("pincode")
     };
 
-    console.log("Down....")
-    console.log(locationData)
     createLocation(locationData)
         .then(locRes => {
             if (locRes.status !== "success") {
@@ -376,15 +390,20 @@ $(".issueCreation").on("submit", function (e) {
             const files = document.getElementById("attachments").files;
 
             if (files.length === 0) {
-                alert("Please select files");
+                Toastify({
+                    text: "Please Select Files.",
+                    duration: 3000
+                }).showToast();
                 return;
             }
 
-            console.log(data)
             createIssue(data)
         })
         .catch(err => {
-            alert(err.message);
+            Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
         });
 });
 
@@ -552,10 +571,10 @@ if (!CURRENT_USER || !CURRENT_USER.isLogIn) {
 }
 
 const currentUserId = CURRENT_USER.id;
-const currentName=CURRENT_USER.name;
-const currentEmail=CURRENT_USER.email;
-const currentPassword=CURRENT_USER.password;
-const currentRole=CURRENT_USER.role;
+const currentName = CURRENT_USER.name;
+const currentEmail = CURRENT_USER.email;
+const currentPassword = CURRENT_USER.password;
+const currentRole = CURRENT_USER.role;
 
 async function fetchJSON(url, options = {}) {
     const res = await fetch(url, options);
@@ -568,12 +587,12 @@ async function fetchJSON(url, options = {}) {
 }
 
 $(document).on("click", ".editUserBtn", async function () {
-        $("#updateUserId").val(currentUserId);
-        $("#updateName").val(currentName);
-        $("#updateEmail").val(currentEmail);
-        $("#updatePassword").val(currentPassword);
+    $("#updateUserId").val(currentUserId);
+    $("#updateName").val(currentName);
+    $("#updateEmail").val(currentEmail);
+    $("#updatePassword").val(currentPassword);
 
-        $("#updateUserModal").modal("show");
+    $("#updateUserModal").modal("show");
 });
 
 $("#updateUserBtn").on("click", async function () {
@@ -581,23 +600,32 @@ $("#updateUserBtn").on("click", async function () {
     const name = $("#updateName").val().trim();
     const email = $("#updateEmail").val().trim();
     const password = $("#updatePassword").val();
-    role=currentRole
+    role = currentRole
 
     if (!name || !email || !password || !role) {
-        alert("All fields required");
+        Toastify({
+            text: 'All Fields Required.',
+            duration: 3000
+        }).showToast();
         return;
     }
 
     try {
-        await fetchJSON(`/user/update?id=${userId}`, {
+        const data = await fetchJSON(`/user/update?id=${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password,role })
+            body: JSON.stringify({ name, email, password, role })
         });
 
         $("#updateUserModal").modal("hide");
-        alert("User updated successfully");
+        Toastify({
+            text: data.message,
+            duration: 3000
+        }).showToast();
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
     }
 });

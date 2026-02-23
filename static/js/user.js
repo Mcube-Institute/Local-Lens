@@ -67,7 +67,10 @@ async function loadUsers() {
         });
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 }
 
@@ -90,7 +93,7 @@ $(document).on("change", ".roleSelect", async function () {
     const user = res.data
 
     try {
-        await fetchJSON(`/user/update?id=${userId}`, {
+        const data= await fetchJSON(`/user/update?id=${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -101,10 +104,16 @@ $(document).on("change", ".roleSelect", async function () {
             })
         });
 
-        alert("User role updated");
+         Toastify({
+                text: data.message,
+                duration: 3000
+            }).showToast();
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
         loadUsers();
     }
 });
@@ -116,12 +125,15 @@ $("#createUserBtn").on("click", async function () {
     const role = $("#userRole").val();
 
     if (!name || !email || !password || !role) {
-        alert("All fields required");
+         Toastify({
+                text: "All Fields Required.",
+                duration: 3000
+            }).showToast();
         return;
     }
 
     try {
-        await fetchJSON("/user/new", {
+        const data=await fetchJSON("/user/new", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password, role })
@@ -130,11 +142,17 @@ $("#createUserBtn").on("click", async function () {
         $("#newUserModal").modal("hide");
         $("#name, #email, #password").val("");
 
-        alert("User created");
+         Toastify({
+                text: data.message,
+                duration: 3000
+            }).showToast();
         loadUsers();
 
     } catch (err) {
-        alert(err.message);
+        Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 });
 
@@ -157,7 +175,10 @@ $(document).on("click", ".editUserBtn", async function () {
         $("#updateUserModal").modal("show");
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 });
 
@@ -169,23 +190,32 @@ $("#updateUserBtn").on("click", async function () {
     role=updateRole
 
     if (!name || !email || !password || !role) {
-        alert("All fields required");
+         Toastify({
+                text: "All Fields Required.",
+                duration: 3000
+            }).showToast();
         return;
     }
 
     try {
-        await fetchJSON(`/user/update?id=${userId}`, {
+        const data=await fetchJSON(`/user/update?id=${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password,role })
         });
 
         $("#updateUserModal").modal("hide");
-        alert("User updated successfully");
+         Toastify({
+                text: data.message,
+                duration: 3000
+            }).showToast();
         loadUsers();
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 });
 
@@ -198,15 +228,21 @@ $(document).on("click", ".deleteUserBtn", async function () {
     if (!confirm(`Delete user "${name}"?`)) return;
 
     try {
-        await fetchJSON(`/user/delete?id=${userId}`, {
+        const data= await fetchJSON(`/user/delete?id=${userId}`, {
             method: "DELETE"
         });
 
-        alert("User deleted");
+         Toastify({
+                text: data.message,
+                duration: 3000
+            }).showToast();
         loadUsers();
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 });
 

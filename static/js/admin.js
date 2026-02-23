@@ -113,7 +113,10 @@ async function loadAdminIssues() {
         }
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 }
 
@@ -152,13 +155,19 @@ $(document).on("change", ".statusSelect", async function () {
             throw new Error(data.message);
         }
 
-        alert("Status updated successfully");
+         Toastify({
+                text: data.message,
+                duration: 3000
+            }).showToast();
 
         // persist new status
         row.attr("data-status", newStatus);
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
         select.val(oldStatus); // revert UI
     }
 });
@@ -191,7 +200,10 @@ $(document).on("click", ".viewHistory", async function () {
             .show();
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 });
 
@@ -228,7 +240,10 @@ $(document).on("click", ".viewAttachments", async function () {
             .show();
 
     } catch (err) {
-        alert(err.message);
+         Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
     }
 });
 

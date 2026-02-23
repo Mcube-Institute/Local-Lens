@@ -13,13 +13,20 @@ function logIn(data) {
                 $(".logOut").removeClass("visually-hidden");
                 $(".logIn").addClass("visually-hidden");
                 window.location.replace("/");
+                 Toastify({
+                text: data.message,
+                duration: 3000
+            }).showToast();
             }
             else {
                 throw new Error(data.message);
             }
         })
         .catch(err => {
-            alert(err)
+             Toastify({
+                text: err.message,
+                duration: 3000
+            }).showToast();
         })
 }
 

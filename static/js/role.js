@@ -73,7 +73,10 @@ async function loadRoles() {
         }
 
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
     }
 }
 
@@ -82,25 +85,36 @@ $("#createRoleBtn").on("click", async function () {
     const roleName = $("#roleName").val().trim();
 
     if (!roleName) {
-        alert("Role name is required");
+        Toastify({
+            text: "role Name Was Required.",
+            duration: 3000
+        }).showToast();
         return;
     }
 
     try {
-        await fetchJSON("/role/new", {
+        const res = await fetchJSON("/role/new", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: roleName })
         });
 
+        const data = await res
+
         $("#roleName").val("");
         $("#newRoleModal").modal("hide");
 
-        alert("Role created successfully");
+        Toastify({
+            text: data.message,
+            duration: 3000
+        }).showToast();
         loadRoles();
 
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
     }
 });
 
@@ -117,17 +131,25 @@ $(document).on("click", ".editRoleBtn", function () {
 
 async function updateRole(roleId, name) {
     try {
-        await fetchJSON(`/role/update?id=${roleId}`, {
+        const res = await fetchJSON(`/role/update?id=${roleId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name })
         });
 
-        alert("Role updated successfully");
+        const data = await res
+
+        Toastify({
+            text: data.message,
+            duration: 3000
+        }).showToast();
         loadRoles();
 
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
     }
 }
 
@@ -145,15 +167,21 @@ $(document).on("click", ".deleteRoleBtn", function () {
 
 async function deleteRole(roleId) {
     try {
-        await fetchJSON(`/role/delete?id=${roleId}`, {
+        const data = await fetchJSON(`/role/delete?id=${roleId}`, {
             method: "DELETE"
         });
 
-        alert("Role deleted successfully");
+        Toastify({
+            text: "Role Deleted Successfully.",
+            duration: 3000
+        }).showToast();
         loadRoles();
 
     } catch (err) {
-        alert(err.message);
+        Toastify({
+            text: err.message,
+            duration: 3000
+        }).showToast();
     }
 }
 
