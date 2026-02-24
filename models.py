@@ -6,7 +6,7 @@ class TempEmailOtp(Document):
     email=EmailField()
     otp=StringField(min_length=6, max_length=6)
     otpExpiry=DateTimeField()
-    createdAt = DateTimeField(default=datetime.now())
+    createdAt = DateTimeField(default=datetime.now)
     meta = {
         'indexes': [
             {
