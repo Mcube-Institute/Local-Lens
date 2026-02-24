@@ -19,6 +19,16 @@
       <h2 class="authTitle">Create Account</h2>
       <p class="authSubtitle">Join LocalLens and report local issues</p>
 
+      <form id="otGen">
+        <div class="mb-3">
+          <label for="email">Email</label>
+          <div class="d-flex">
+            <input type="email" class="form-control me-2" placeholder="you@email.com" name="email" id="email" required>
+            <button type="submit" class="btn btn-primary">OTP</button>
+          </div>
+        </div>
+      </form>
+
       <form id="registerForm">
         <div class="mb-3">
           <label for="name">Name</label>
@@ -26,8 +36,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="email">Email</label>
-          <input type="email" class="form-control" placeholder="you@email.com" name="email" id="email" required>
+          <label for="OTP">OTP</label>
+          <input type="text" class="form-control" id="otp" name="otp" maxlength="6" minlength="6" inputmode="numeric"
+            pattern="[0-9]{6}" placeholder="Enter OTP Here." required>
         </div>
 
         <div class="mb-3">

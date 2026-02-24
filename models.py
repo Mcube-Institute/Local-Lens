@@ -2,6 +2,20 @@ from mongoengine import *
 from uuid import uuid4
 from datetime import datetime
 
+class TempEmailOtp(Document):
+    email=EmailField()
+    otp=StringField(min_length=6, max_length=6)
+    otpExpiry=DateTimeField()
+    createdAt = DateTimeField(default=datetime.now())
+    meta = {
+        'indexes': [
+            {
+                'fields': ['otpExpiry'],
+                'expireAfterSeconds': 0
+            }
+        ]
+    }
+
 class Role(Document):
     id = StringField(primary_key=True, default=lambda: str(uuid4()))
     name = StringField(required=True, unique=True)
@@ -15,9 +29,10 @@ class User(Document):
     password = StringField(required=True)
     role = ReferenceField(Role, required=True, reverse_delete_rule=DENY,default=lambda: Role.objects(name="User").first())
     lastAssigned = BooleanField(default=False)
-    otp=StringField()
+    otp=StringField(min_length=6, max_length=6)
     otpExpiry=DateTimeField()
     createdAt = DateTimeField(default=datetime.now())
+    otpCreatedAt=DateTimeField(default=datetime.now())
     updatedAt = DateTimeField()
 
 class Location(Document):

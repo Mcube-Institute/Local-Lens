@@ -39,6 +39,14 @@ def register():
             "name":name,
             "email":email
         }
+
+        msg=Message(
+        "LocalLens Registered Successfuuly.",
+        sender=("LocalLens Support", current_app.config['MAIL_USERNAME']),
+        recipients=[email]
+        )
+        msg.body = f"Hi Mr.{name} Thank You!! For Choosing LocalLens,You Can Now Help Others  By Reporting CIVIC Issues In Your Local. We Are Here For Resolve And Improve Our Country."
+        current_app.extensions['mail'].send(msg)
  
         return jsonify({"status": "success", "message": "User Registered Successfully."}), 201   
     except Exception as e:
@@ -92,6 +100,12 @@ def forgetPassword():
         
         user=User.objects(email=email).first()
 
+        if user and (datetime.now() - user.otpCreatedAt).seconds < 60:
+            return jsonify({
+                "status":"error",
+                "message":"Please wait 60 sec before requesting another OTP."
+                    }), 429
+
         if not user:
             return jsonify({"status":"error","message":"User Not Found,Kindly Check Email Address."}), 404
 
@@ -134,7 +148,7 @@ def verifyOtp():
             return jsonify({"status":"error","message":"Invalid OTP"}),400
 
         if datetime.now() > user.otpExpiry:
-            return jsonify({"message": "OTP expired"}), 400
+            return jsonify({"status":"error","message": "OTP expired"}), 400
 
         return jsonify({"status":"success","message":"OTP Verified Successfully."}),200
     except Exception as e:
