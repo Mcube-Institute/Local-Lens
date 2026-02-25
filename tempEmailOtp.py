@@ -26,7 +26,7 @@ def generateOtp():
         if existing and (datetime.now() - existing.createdAt).seconds < 60:
             return jsonify({
                 "status":"error",
-                "message":"Please wait before requesting another OTP."
+                "message":"Please wait 60sec before requesting another OTP."
                     }), 429
 
         user=User.objects(email=email).first()

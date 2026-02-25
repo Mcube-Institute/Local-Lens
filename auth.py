@@ -100,7 +100,7 @@ def forgetPassword():
         
         user=User.objects(email=email).first()
 
-        if user and (datetime.now() - user.otpCreatedAt).seconds < 60:
+        if user and (datetime.utcnow() - user.otpCreatedAt).seconds < 60:
             return jsonify({
                 "status":"error",
                 "message":"Please wait 60 sec before requesting another OTP."
@@ -111,7 +111,8 @@ def forgetPassword():
 
         otp=genOtp()            
         user.otp=otp
-        user.otpExpiry=datetime.now()+timedelta(minutes=5)
+        user.otpCreatedAt=datetime.utcnow()
+        user.otpExpiry=datetime.utcnow()+timedelta(minutes=5)
         user.save()
 
         msg=Message(
@@ -147,7 +148,7 @@ def verifyOtp():
         if user.otp != otp:
             return jsonify({"status":"error","message":"Invalid OTP"}),400
 
-        if datetime.now() > user.otpExpiry:
+        if datetime.utcnow() > user.otpExpiry:
             return jsonify({"status":"error","message": "OTP expired"}), 400
 
         return jsonify({"status":"success","message":"OTP Verified Successfully."}),200

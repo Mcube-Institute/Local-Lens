@@ -6,7 +6,7 @@ class TempEmailOtp(Document):
     email=EmailField()
     otp=StringField(min_length=6, max_length=6)
     otpExpiry=DateTimeField()
-    createdAt = DateTimeField(default=datetime.now)
+    createdAt = DateTimeField(default=datetime.utcnow)
     meta = {
         'indexes': [
             {
@@ -19,7 +19,7 @@ class TempEmailOtp(Document):
 class Role(Document):
     id = StringField(primary_key=True, default=lambda: str(uuid4()))
     name = StringField(required=True, unique=True)
-    createdAt = DateTimeField(default=datetime.now())
+    createdAt = DateTimeField(default=datetime.utcnow())
     updatedAt = DateTimeField()
 
 class User(Document):
@@ -31,8 +31,8 @@ class User(Document):
     lastAssigned = BooleanField(default=False)
     otp=StringField(min_length=6, max_length=6)
     otpExpiry=DateTimeField()
-    createdAt = DateTimeField(default=datetime.now())
-    otpCreatedAt=DateTimeField(default=datetime.now())
+    createdAt = DateTimeField(default=datetime.utcnow())
+    otpCreatedAt=DateTimeField(default=datetime.utcnow())
     updatedAt = DateTimeField()
 
 class Location(Document):
@@ -42,7 +42,7 @@ class Location(Document):
     state = StringField(required=True)
     country = StringField(required=True)
     pincode = StringField(required=True, min_length=6, max_length=6)
-    createdAt = DateTimeField(default=datetime.now())
+    createdAt = DateTimeField(default=datetime.utcnow())
     updatedAt = DateTimeField()
 
 class Issue(Document):
@@ -56,7 +56,7 @@ class Issue(Document):
     tags = StringField()
     status = StringField(default="REPORTED",choices=["REPORTED", "IN_PROGRESS", "RESOLVED", "CLOSED"])
     assignedTo = ReferenceField(User, required=True)
-    createdAt = DateTimeField(default=datetime.now())
+    createdAt = DateTimeField(default=datetime.utcnow())
     updatedAt = DateTimeField()
 
 class IssueStatusHistory(Document):
@@ -67,7 +67,7 @@ class IssueStatusHistory(Document):
     updatedBy=ReferenceField(User,required=True)
     rejectedReason=StringField()
     resolvedAt=DateTimeField()
-    createdAt = DateTimeField(default=datetime.now())
+    createdAt = DateTimeField(default=datetime.utcnow())
     updatedAt=DateTimeField()
 
 class Notifications(Document):
@@ -76,5 +76,5 @@ class Notifications(Document):
     issue=ReferenceField(Issue,required=True)
     message=StringField(required=True)
     isViewed=BooleanField(default=False)
-    createdAt=DateTimeField(default=datetime.now())
+    createdAt=DateTimeField(default=datetime.utcnow())
     updatedAt=DateTimeField()

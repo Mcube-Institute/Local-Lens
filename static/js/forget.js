@@ -21,6 +21,7 @@ async function sendOtp(email) {
                 text: `OTP for ${email} Send Successfully.`,
                 duration: 3000
             }).showToast();
+            return data;
         }
         else {
             Toastify({
@@ -65,7 +66,7 @@ async function verifyOtp(email, otp, newPass, confirmPass) {
                         text: dataReset.message,
                         duration: 3000
                     }).showToast();
-                    window.location.href = "/";
+                    window.location.href = "/login";
                 }
                 else {
                     Toastify({
@@ -85,36 +86,14 @@ async function verifyOtp(email, otp, newPass, confirmPass) {
     }
 }
 
-/* async function resetPassword(email, newPass, confirmPass) {
-    try {
-        const res = await fetch("/user/resetPassword", {
-            method: "POST",
-            headers: { "content-Type": "application/json" },
-            body: JSON.stringify({ "email": email, "newPassword": newPass, "confirmPassword": confirmPass })
-        })
-        const data = await res.json();
-        if (data.status == 'success') {
-            Toastify({
-                text: `Password Changed Successfully.`,
-                duration: 3000
-            }).showToast();
-        }
-    }
-    catch (err) {
-        Toastify({
-            text: err.message,
-            duration: 3000
-        }).showToast();
-    }
-} */
-
-let email = ''
-
 $(document).on("submit", ".otpWrap", async function (e) {
     e.preventDefault();
     const data = new FormData(this)
-    email += data.get('email')
-    sendOtp(data.get('email'))
+    const result=sendOtp(data.get('email'))
+    email=data.get('email')
+    if (result.status === "success") {
+        document.getElementById("regEmail").value = email;
+    }
 })
 
 $(document).on("submit", "#resetPassword", async function (e) {
