@@ -61,7 +61,7 @@ async function verifyOtp(email, otp, newPass, confirmPass) {
                 })
                 const dataReset = await result.json();
                 if (dataReset.status == 'success') {
-                    
+
                     Toastify({
                         text: dataReset.message,
                         duration: 3000
@@ -89,10 +89,22 @@ async function verifyOtp(email, otp, newPass, confirmPass) {
 $(document).on("submit", ".otpWrap", async function (e) {
     e.preventDefault();
     const data = new FormData(this)
-    const result=sendOtp(data.get('email'))
-    email=data.get('email')
-    if (result.status === "success") {
+    email = data.get('email')
+    const result =await sendOtp(email)
+    if (result.status == "success") {
         document.getElementById("regEmail").value = email;
+        let seconds = 60;
+        const timer = setInterval(() => {
+            let btn = document.getElementById('submit')
+            btn.innerText = seconds;
+            btn.disabled = true;
+            seconds--;
+            if (seconds < 0) {
+                clearInterval(timer)
+                btn.innerText = 'OTP';
+                btn.disabled = false;
+            }
+        }, 1000)
     }
 })
 
