@@ -1,5 +1,6 @@
 from flask import Flask,request,render_template,jsonify,session,redirect
 import os
+from dotenv import load_dotenv
 from flask_mail import Mail
 from mongoengine import connect,connection
 from models import *
@@ -14,16 +15,26 @@ from tempEmailOtp import tempEmailOtpBp
 
 app=Flask(__name__)
 
-app.secret_key="3c2c6be4-f63c-428a-9cd5-e909ba3b0e2a"
+load_dotenv("secret.env")
+
+
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
+app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
+app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT"))
+app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS") == "True"
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
 
 try:
-    connect(host="mongodb://localhost:27017/localLens")
+    connect(host=os.getenv("MONGO_URI"))
     if connection.get_connection():
-        print("Database Connected.")
+        print("Atlas Database Connected.")
     else:
         print("Database not connected.")
 except Exception as e:
-    print(f"Error:{str(e)}")
+    print(f"Error: {str(e)}")
 
 app.register_blueprint(authBp)
 app.register_blueprint(roleBp)
@@ -85,13 +96,6 @@ def loadData():
         "isLogIn":isLogIn
     }
     return userData
-
-
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'thalathanush8@gmail.com'
-app.config['MAIL_PASSWORD'] =   os.getenv('MAIL_PASSWORD')
 
 mail = Mail(app)
 
