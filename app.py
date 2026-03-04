@@ -71,7 +71,18 @@ def register():
 
 @app.route("/resetPassword")
 def resetPassword():
-    return render_template("forgetPassword.html")    
+    return render_template("forgetPassword.html")   
+
+@app.route("/mail-test")
+def mail_test():
+    msg = Message(
+        subject="Test Email",
+        sender=app.config["MAIL_USERNAME"],
+        recipients=["thalathanush8@gmail.com"]
+    )
+    msg.body = "Mail test from Render"
+    mail.send(msg)
+    return "Mail sent" 
 
 @app.context_processor
 def loadData():
