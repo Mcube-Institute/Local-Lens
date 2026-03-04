@@ -1,7 +1,7 @@
 from flask import Flask,request,render_template,jsonify,session,redirect
 import os
 from dotenv import load_dotenv
-from flask_mail import Mail
+from flask_mail import Mail,Message
 from mongoengine import connect,connection
 from models import *
 from auth import authBp
