@@ -4,6 +4,7 @@ import random
 from flask_mail import Message
 from flask import current_app
 from datetime import datetime,timedelta
+import re
 
 def genOtp():
     return(str(random.randint(100000,999999)))

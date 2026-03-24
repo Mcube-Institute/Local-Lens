@@ -1,5 +1,5 @@
 from flask import Blueprint,request,jsonify
-from models import Role
+from models import Role,User
 from datetime import datetime
 
 roleBp=Blueprint("roleBp",__name__)
@@ -135,10 +135,18 @@ def roleDelete():
 
         if not role:
             return jsonify({"status":"error","message":"Role Not Found."}), 404 
+
+        protectedRoles=["rider","driver","admin"]
+
+        if role.name.lower() in protectedRoles:
+            return jsonify({"status":"error","message":"This Role Cannot Be Deleted."}), 403
+        
+        if User.objects(role=role).first():
+            return jsonify({"status":"error","message":"Role Is Assigned To Users And Cannot Be Deleted."}), 400
         
         role.delete()
 
-        return jsonify({"status":"success","messge":"Role Deleted Successfully."}), 200 
+        return jsonify({"status":"success","message":"Role Deleted Successfully."}), 200 
     
     except Exception as e:
         return jsonify({"status":"error","message":f"Error {str(e)}"}), 500
